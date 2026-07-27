@@ -55,31 +55,68 @@ def create_app(bot):
 
     PAGE = """<!doctype html><html lang='fr'><head><meta charset='utf-8'>
 <title>ChatBot IA - Sport</title>
+<link rel='icon' href='data:,'>
 <style>
- body{font-family:sans-serif;max-width:640px;margin:2rem auto;padding:0 1rem}
+ body{font-family:sans-serif;max-width:660px;margin:2rem auto;padding:0 1rem}
  #log{border:1px solid #ccc;border-radius:8px;padding:1rem;height:340px;
       overflow-y:auto;margin-bottom:1rem;background:#fafafa}
  .u{color:#0b57d0;margin:.4rem 0}.b{color:#222;margin:.4rem 0}
+ .fb{font-size:.85rem;color:#666;margin:0 0 .8rem 0}
+ .fb button{padding:.1rem .45rem;margin-right:.2rem;cursor:pointer}
  form{display:flex;gap:.5rem}input[type=text]{flex:1;padding:.5rem}
  button{padding:.5rem 1rem}
 </style></head><body>
 <h2>ChatBot IA - Sport, musculation &amp; nutrition</h2>
 <div id='log'></div>
-<form onsubmit='return ask()'>
- <input type='text' id='q' placeholder='Votre question...' autofocus>
- <button>Envoyer</button>
+<form id='chat'>
+ <input type='text' id='q' placeholder='Votre question...' autocomplete='off' autofocus>
+ <button type='submit'>Envoyer</button>
 </form>
 <script>
+const log=document.getElementById('log');
+const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
+  '"':'&quot;',"'":'&#39;'}[c]));
+
 async function ask(){
- const q=document.getElementById('q');const log=document.getElementById('log');
- const question=q.value.trim();if(!question)return false;
- log.innerHTML+=`<p class='u'><b>Vous :</b> ${question}</p>`;q.value='';
- const r=await fetch('/ask',{method:'POST',
-   headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({question})});
- const d=await r.json();
- log.innerHTML+=`<p class='b'><b>Bot :</b> ${d.answer}</p>`;
- log.scrollTop=log.scrollHeight;return false;}
+  const input=document.getElementById('q');
+  const question=input.value.trim();
+  if(!question)return;
+  input.value='';
+  log.insertAdjacentHTML('beforeend',
+    `<p class='u'><b>Vous :</b> ${esc(question)}</p>`);
+  log.scrollTop=log.scrollHeight;
+  try{
+    const r=await fetch('/ask',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({question})});
+    const d=await r.json();
+    const id='fb'+Date.now();
+    log.insertAdjacentHTML('beforeend',
+      `<p class='b'><b>Bot :</b> ${esc(d.answer)}</p>
+       <p class='fb' id='${id}'>Noter cette reponse :
+        ${[1,2,3,4,5].map(n=>`<button type='button'>${n}</button>`).join('')}</p>`);
+    const zone=document.getElementById(id);
+    zone.querySelectorAll('button').forEach((b,i)=>{
+      b.onclick=async()=>{
+        await fetch('/feedback',{method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({question,answer:d.answer,score:i+1})});
+        zone.textContent='Merci, feedback enregistre !';};
+    });
+  }catch(e){
+    log.insertAdjacentHTML('beforeend',
+      `<p class='b'><b>Bot :</b> Erreur de connexion au serveur.</p>`);
+  }
+  log.scrollTop=log.scrollHeight;
+}
+
+// IMPORTANT : ask() est async donc retourne une Promise (toujours truthy).
+// Un 'return ask()' ne bloquerait PAS l'envoi natif du formulaire et la page
+// se rechargerait. On annule donc explicitement l'evenement.
+document.getElementById('chat').addEventListener('submit',ev=>{
+  ev.preventDefault();
+  ask();
+});
 </script></body></html>"""
 
     @app.route("/")
