@@ -2,301 +2,689 @@
   {
     "question": "Qu'est-ce que le sport ?",
     "answer": "Le sport est un ensemble d'activites physiques pratiquees sous forme de jeux ou de competitions, individuellement ou en equipe, dans le respect de regles definies.",
-    "concepts": ["sport"],
+    "concepts": [
+      "sport"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que le football ?",
     "answer": "Le football est un sport collectif oppose deux equipes de 11 joueurs qui tentent de marquer des buts en frappant un ballon avec les pieds, sans utiliser les mains.",
-    "concepts": ["football", "sport", "equipe", "ballon"],
+    "concepts": [
+      "football",
+      "sport",
+      "equipe",
+      "ballon"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que le basketball ?",
     "answer": "Le basketball est un sport collectif ou deux equipes de 5 joueurs marquent des points en lancant un ballon dans le panier adverse situe a 3,05 m de hauteur.",
-    "concepts": ["basketball", "sport", "equipe", "ballon"],
+    "concepts": [
+      "basketball",
+      "sport",
+      "equipe",
+      "ballon"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que le tennis ?",
     "answer": "Le tennis est un sport de raquette qui se joue en simple (1 contre 1) ou en double (2 contre 2), l'objectif etant de renvoyer la balle dans le camp adverse.",
-    "concepts": ["tennis", "sport", "raquette"],
+    "concepts": [
+      "tennis",
+      "sport",
+      "raquette"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que le rugby ?",
     "answer": "Le rugby est un sport collectif de contact ou deux equipes de 15 joueurs tentent de marquer des essais en aplatissant un ballon ovale dans l'en-but adverse.",
-    "concepts": ["rugby", "sport", "equipe", "ballon"],
+    "concepts": [
+      "rugby",
+      "sport",
+      "equipe",
+      "ballon"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que le handball ?",
     "answer": "Le handball est un sport collectif joue a la main entre deux equipes de 7 joueurs qui tentent de marquer dans le but adverse.",
-    "concepts": ["handball", "sport", "equipe", "ballon"],
+    "concepts": [
+      "handball",
+      "sport",
+      "equipe",
+      "ballon"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que le volleyball ?",
     "answer": "Le volleyball est un sport collectif ou deux equipes de 6 joueurs, separees par un filet, se renvoient un ballon avec les mains sans le laisser toucher le sol.",
-    "concepts": ["volleyball", "sport", "equipe", "ballon"],
+    "concepts": [
+      "volleyball",
+      "sport",
+      "equipe",
+      "ballon"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que la natation ?",
     "answer": "La natation est un sport aquatique consistant a se deplacer dans l'eau grace a differentes nages : crawl, brasse, dos et papillon.",
-    "concepts": ["natation", "sport", "piscine"],
+    "concepts": [
+      "natation",
+      "sport",
+      "piscine"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que l'athletisme ?",
     "answer": "L'athletisme regroupe des disciplines de course, de saut et de lancer. C'est l'un des sports les plus anciens et un pilier des Jeux Olympiques.",
-    "concepts": ["athletisme", "sport", "course", "jeux_olympiques"],
+    "concepts": [
+      "athletisme",
+      "sport",
+      "course",
+      "jeux_olympiques"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que le cyclisme ?",
     "answer": "Le cyclisme est un sport pratique a velo, sur route ou sur piste, qui developpe fortement l'endurance et le systeme cardiovasculaire.",
-    "concepts": ["cyclisme", "sport", "endurance"],
+    "concepts": [
+      "cyclisme",
+      "sport",
+      "endurance"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce qu'un marathon ?",
     "answer": "Le marathon est une course a pied de 42,195 km. C'est une epreuve d'endurance qui demande plusieurs mois de preparation.",
-    "concepts": ["marathon", "course", "endurance"],
+    "concepts": [
+      "marathon",
+      "course",
+      "endurance"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que le sprint ?",
     "answer": "Le sprint est une course de vitesse sur courte distance (60 m, 100 m, 200 m ou 400 m) qui sollicite la puissance et la force explosive.",
-    "concepts": ["sprint", "course", "force"],
+    "concepts": [
+      "sprint",
+      "course",
+      "force"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que la musculation ?",
     "answer": "La musculation est un entrainement visant a developper la force et la masse musculaire grace a des exercices avec charges ou au poids du corps.",
-    "concepts": ["musculation", "force", "entrainement"],
+    "concepts": [
+      "musculation",
+      "force",
+      "entrainement"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que le cardio ?",
     "answer": "Le cardio designe les exercices d'intensite moderee a elevee qui font travailler le coeur et les poumons, comme la course, le velo ou la natation.",
-    "concepts": ["cardio", "entrainement", "endurance"],
+    "concepts": [
+      "cardio",
+      "entrainement",
+      "endurance"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que l'endurance ?",
     "answer": "L'endurance est la capacite a maintenir un effort physique prolonge dans le temps. Elle s'ameliore par un entrainement cardio regulier.",
-    "concepts": ["endurance", "cardio"],
+    "concepts": [
+      "endurance",
+      "cardio"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que la souplesse ?",
     "answer": "La souplesse est l'amplitude de mouvement des articulations et des muscles. Elle se travaille principalement avec des etirements reguliers.",
-    "concepts": ["souplesse", "etirement"],
+    "concepts": [
+      "souplesse",
+      "etirement"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce qu'un etirement ?",
     "answer": "Un etirement est un exercice d'allongement musculaire qui ameliore la souplesse et favorise la recuperation apres l'effort.",
-    "concepts": ["etirement", "souplesse", "recuperation"],
+    "concepts": [
+      "etirement",
+      "souplesse",
+      "recuperation"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que l'echauffement ?",
     "answer": "L'echauffement est une phase de preparation progressive du corps avant l'effort : il augmente la temperature musculaire et reduit le risque de blessure.",
-    "concepts": ["echauffement", "blessure", "entrainement"],
+    "concepts": [
+      "echauffement",
+      "blessure",
+      "entrainement"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que la recuperation ?",
     "answer": "La recuperation regroupe le repos, le sommeil, l'hydratation et la nutrition qui permettent au corps de se regenerer apres l'entrainement.",
-    "concepts": ["recuperation", "hydratation", "nutrition"],
+    "concepts": [
+      "recuperation",
+      "hydratation",
+      "nutrition"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que la VO2max ?",
     "answer": "La VO2max est le volume maximal d'oxygene que le corps peut consommer pendant un effort. C'est un indicateur cle de la capacite d'endurance.",
-    "concepts": ["vo2max", "endurance", "cardio"],
+    "concepts": [
+      "vo2max",
+      "endurance",
+      "cardio"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce qu'une competition ?",
     "answer": "Une competition est un evenement sportif organise ou des athletes ou des equipes s'affrontent selon des regles pour obtenir la victoire ou un classement.",
-    "concepts": ["competition", "sport"],
+    "concepts": [
+      "competition",
+      "sport"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que la coupe du monde ?",
     "answer": "La coupe du monde est une competition internationale opposant les meilleures equipes nationales. La plus celebre est celle de football, organisee tous les 4 ans.",
-    "concepts": ["coupe_du_monde", "competition", "football"],
+    "concepts": [
+      "coupe_du_monde",
+      "competition",
+      "football"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Qu'est-ce que les jeux olympiques ?",
     "answer": "Les Jeux Olympiques sont la plus grande competition multisports au monde. Ils reunissent des athletes de tous les pays tous les 4 ans, en version ete et hiver.",
-    "concepts": ["jeux_olympiques", "competition", "sport"],
+    "concepts": [
+      "jeux_olympiques",
+      "competition",
+      "sport"
+    ],
     "intent": "DEFINITION"
   },
   {
     "question": "Quel est le role de l'arbitre ?",
     "answer": "L'arbitre fait respecter les regles du jeu pendant un match : il valide les points, sanctionne les fautes et garantit l'equite entre les equipes.",
-    "concepts": ["arbitre", "competition"],
+    "concepts": [
+      "arbitre",
+      "competition"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Combien de joueurs dans une equipe de football ?",
     "answer": "Une equipe de football compte 11 joueurs sur le terrain, dont un gardien de but, plus des remplacants sur le banc.",
-    "concepts": ["football", "equipe"],
+    "concepts": [
+      "football",
+      "equipe"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Combien de joueurs dans une equipe de basketball ?",
     "answer": "Une equipe de basketball compte 5 joueurs sur le terrain, avec des remplacements illimites pendant le match.",
-    "concepts": ["basketball", "equipe"],
+    "concepts": [
+      "basketball",
+      "equipe"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Combien de joueurs dans une equipe de rugby ?",
     "answer": "Une equipe de rugby a XV compte 15 joueurs sur le terrain : 8 avants et 7 arrieres. Il existe aussi le rugby a 7, discipline olympique.",
-    "concepts": ["rugby", "equipe"],
+    "concepts": [
+      "rugby",
+      "equipe"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Combien de temps dure un match de football ?",
     "answer": "Un match de football dure 90 minutes, en deux mi-temps de 45 minutes, plus le temps additionnel decide par l'arbitre.",
-    "concepts": ["football", "arbitre"],
+    "concepts": [
+      "football",
+      "arbitre"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Quelle est la distance d'un marathon ?",
     "answer": "Un marathon mesure exactement 42,195 km. Cette distance est fixee depuis les Jeux Olympiques de Londres en 1908.",
-    "concepts": ["marathon", "course", "jeux_olympiques"],
+    "concepts": [
+      "marathon",
+      "course",
+      "jeux_olympiques"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Pourquoi s'echauffer avant le sport ?",
     "answer": "S'echauffer prepare les muscles et les articulations a l'effort, ameliore la performance et reduit fortement le risque de blessure.",
-    "concepts": ["echauffement", "blessure", "entrainement"],
+    "concepts": [
+      "echauffement",
+      "blessure",
+      "entrainement"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Comment eviter les blessures ?",
     "answer": "Pour eviter les blessures : echauffement systematique, progression graduelle des charges, bonne technique, recuperation suffisante et hydratation reguliere.",
-    "concepts": ["blessure", "echauffement", "recuperation", "hydratation"],
+    "concepts": [
+      "blessure",
+      "echauffement",
+      "recuperation",
+      "hydratation"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Comment eviter les crampes ?",
     "answer": "Pour eviter les crampes : bien s'hydrater avant et pendant l'effort, consommer des mineraux (magnesium, potassium) et ne pas negliger l'echauffement.",
-    "concepts": ["crampes", "hydratation", "echauffement"],
+    "concepts": [
+      "crampes",
+      "hydratation",
+      "echauffement"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Pourquoi l'hydratation est-elle importante ?",
     "answer": "L'hydratation compense la perte d'eau due a la transpiration. Elle maintient la performance, previent les crampes et facilite la recuperation.",
-    "concepts": ["hydratation", "crampes", "recuperation"],
+    "concepts": [
+      "hydratation",
+      "crampes",
+      "recuperation"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Quel est le role des proteines ?",
     "answer": "Les proteines servent a reparer et construire les fibres musculaires apres l'effort. Elles sont essentielles pour progresser en musculation.",
-    "concepts": ["proteines", "nutrition", "musculation"],
+    "concepts": [
+      "proteines",
+      "nutrition",
+      "musculation"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Que manger avant une seance de sport ?",
     "answer": "Avant une seance, privilegier un repas riche en glucides complexes (riz, pates, avoine) 2 a 3 heures avant l'effort, et eviter les aliments trop gras.",
-    "concepts": ["nutrition", "entrainement"],
+    "concepts": [
+      "nutrition",
+      "entrainement"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Que faire apres une seance de sport ?",
     "answer": "Apres une seance : s'etirer legerement, se rehydrater, consommer des proteines et des glucides dans l'heure, et bien dormir pour recuperer.",
-    "concepts": ["recuperation", "etirement", "hydratation", "proteines"],
+    "concepts": [
+      "recuperation",
+      "etirement",
+      "hydratation",
+      "proteines"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Comment ameliorer son endurance ?",
     "answer": "Pour ameliorer son endurance : pratiquer un cardio regulier (course, velo, natation) 2 a 3 fois par semaine, en alternant sorties longues et fractionne.",
-    "concepts": ["endurance", "cardio", "course", "entrainement"],
+    "concepts": [
+      "endurance",
+      "cardio",
+      "course",
+      "entrainement"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Comment gagner en force ?",
     "answer": "Pour gagner en force : faire de la musculation avec des charges progressives, privilegier les exercices polyarticulaires et respecter la recuperation entre les seances.",
-    "concepts": ["force", "musculation", "recuperation"],
+    "concepts": [
+      "force",
+      "musculation",
+      "recuperation"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Comment ameliorer sa souplesse ?",
     "answer": "Pour ameliorer sa souplesse : s'etirer regulierement (10 a 15 minutes par jour), de preference apres l'effort quand les muscles sont chauds, ou via le yoga.",
-    "concepts": ["souplesse", "etirement"],
+    "concepts": [
+      "souplesse",
+      "etirement"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Combien de fois s'entrainer par semaine ?",
     "answer": "Pour un debutant, 2 a 3 seances par semaine suffisent. L'important est la regularite et de laisser au moins un jour de recuperation entre les seances intenses.",
-    "concepts": ["entrainement", "recuperation"],
+    "concepts": [
+      "entrainement",
+      "recuperation"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Comment debuter la course a pied ?",
     "answer": "Pour debuter la course a pied : alterner marche et course, courir 20 a 30 minutes 2 fois par semaine, augmenter le volume de 10% maximum par semaine.",
-    "concepts": ["course", "cardio", "entrainement"],
+    "concepts": [
+      "course",
+      "cardio",
+      "entrainement"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Quels sports sont bons pour le cardio ?",
     "answer": "Les meilleurs sports pour le cardio sont la course a pied, la natation, le cyclisme, l'aviron et les sports collectifs intenses comme le football ou le basketball.",
-    "concepts": ["cardio", "course", "natation", "cyclisme", "football", "basketball"],
+    "concepts": [
+      "cardio",
+      "course",
+      "natation",
+      "cyclisme",
+      "football",
+      "basketball"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "La natation est-elle un sport complet ?",
     "answer": "Oui, la natation est consideree comme un sport complet : elle sollicite presque tous les muscles, developpe le cardio et preserve les articulations grace a la portee de l'eau.",
-    "concepts": ["natation", "cardio", "sport"],
+    "concepts": [
+      "natation",
+      "cardio",
+      "sport"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Quels sont les bienfaits du sport ?",
     "answer": "Le sport ameliore la sante cardiovasculaire, renforce les muscles et les os, reduit le stress, ameliore le sommeil et diminue le risque de nombreuses maladies.",
-    "concepts": ["sport", "cardio", "force"],
+    "concepts": [
+      "sport",
+      "cardio",
+      "force"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Comment se preparer pour une competition ?",
     "answer": "Pour preparer une competition : planifier l'entrainement plusieurs semaines a l'avance, soigner la nutrition et le sommeil, puis reduire la charge les derniers jours.",
-    "concepts": ["competition", "entrainement", "nutrition", "recuperation"],
+    "concepts": [
+      "competition",
+      "entrainement",
+      "nutrition",
+      "recuperation"
+    ],
     "intent": "QUESTION"
   },
   {
     "question": "Quelle est la difference entre cardio et musculation ?",
     "answer": "Le cardio developpe l'endurance et le systeme cardiovasculaire, tandis que la musculation developpe la force et la masse musculaire. Les deux sont complementaires.",
-    "concepts": ["cardio", "musculation", "endurance", "force"],
+    "concepts": [
+      "cardio",
+      "musculation",
+      "endurance",
+      "force"
+    ],
     "intent": "COMPARAISON"
   },
   {
     "question": "Quelle est la difference entre sprint et marathon ?",
     "answer": "Le sprint est un effort explosif de quelques secondes qui sollicite la force, alors que le marathon est un effort d'endurance de plusieurs heures. Ils demandent des entrainements opposes.",
-    "concepts": ["sprint", "marathon", "force", "endurance"],
+    "concepts": [
+      "sprint",
+      "marathon",
+      "force",
+      "endurance"
+    ],
     "intent": "COMPARAISON"
   },
   {
     "question": "Quelle est la difference entre football et rugby ?",
     "answer": "Au football, on joue un ballon rond au pied a 11 contre 11 sans contact volontaire ; au rugby, on joue un ballon ovale a la main a 15 contre 15 avec plaquages autorises.",
-    "concepts": ["football", "rugby", "ballon", "equipe"],
+    "concepts": [
+      "football",
+      "rugby",
+      "ballon",
+      "equipe"
+    ],
     "intent": "COMPARAISON"
   },
   {
     "question": "Quelle est la difference entre handball et basketball ?",
     "answer": "Les deux se jouent a la main, mais le handball se joue a 7 contre 7 avec des buts au sol, tandis que le basketball se joue a 5 contre 5 avec des paniers en hauteur.",
-    "concepts": ["handball", "basketball", "equipe", "ballon"],
+    "concepts": [
+      "handball",
+      "basketball",
+      "equipe",
+      "ballon"
+    ],
     "intent": "COMPARAISON"
   },
   {
     "question": "Quelle est la difference entre endurance et force ?",
     "answer": "L'endurance est la capacite a durer dans l'effort, la force est la capacite a produire une tension musculaire maximale. On les developpe avec des entrainements differents.",
-    "concepts": ["endurance", "force", "entrainement"],
+    "concepts": [
+      "endurance",
+      "force",
+      "entrainement"
+    ],
+    "intent": "COMPARAISON"
+  },
+  {
+    "question": "Qu'est-ce que la prise de masse ?",
+    "answer": "La prise de masse est une phase ou l'on mange plus de calories que l'on en depense (surplus calorique) tout en s'entrainant en musculation, afin de gagner du muscle.",
+    "concepts": [
+      "prise_de_masse",
+      "surplus_calorique",
+      "musculation",
+      "calories"
+    ],
+    "intent": "DEFINITION"
+  },
+  {
+    "question": "Qu'est-ce que la seche ?",
+    "answer": "La seche est une phase de perte de gras : on maintient un deficit calorique modere tout en gardant un apport eleve en proteines et la musculation pour preserver le muscle.",
+    "concepts": [
+      "seche",
+      "perte_de_poids",
+      "deficit_calorique",
+      "proteines",
+      "musculation"
+    ],
+    "intent": "DEFINITION"
+  },
+  {
+    "question": "Qu'est-ce qu'une calorie ?",
+    "answer": "La calorie est l'unite qui mesure l'energie apportee par les aliments et depensee par le corps. L'equilibre entre apports et depenses determine la prise ou la perte de poids.",
+    "concepts": [
+      "calories",
+      "nutrition",
+      "metabolisme"
+    ],
+    "intent": "DEFINITION"
+  },
+  {
+    "question": "Qu'est-ce qu'un deficit calorique ?",
+    "answer": "Un deficit calorique consiste a consommer moins de calories que ce que le corps depense. C'est le mecanisme de base de la perte de poids, a pratiquer de facon moderee.",
+    "concepts": [
+      "deficit_calorique",
+      "calories",
+      "perte_de_poids"
+    ],
+    "intent": "DEFINITION"
+  },
+  {
+    "question": "Qu'est-ce que le metabolisme ?",
+    "answer": "Le metabolisme est l'ensemble des depenses energetiques du corps : metabolisme de base (fonctions vitales) plus les depenses liees a l'activite physique et a la digestion.",
+    "concepts": [
+      "metabolisme",
+      "calories"
+    ],
+    "intent": "DEFINITION"
+  },
+  {
+    "question": "Qu'est-ce que l'hypertrophie ?",
+    "answer": "L'hypertrophie est l'augmentation du volume des fibres musculaires. Elle s'obtient par un entrainement en series de 6 a 12 repetitions, une surcharge progressive et assez de proteines.",
+    "concepts": [
+      "hypertrophie",
+      "musculation",
+      "series",
+      "repetitions",
+      "proteines"
+    ],
+    "intent": "DEFINITION"
+  },
+  {
+    "question": "Qu'est-ce que l'IMC ?",
+    "answer": "L'IMC (indice de masse corporelle) est le rapport poids / taille au carre. C'est un repere general qui ne distingue pas la masse musculaire de la masse grasse.",
+    "concepts": [
+      "imc",
+      "nutrition"
+    ],
+    "intent": "DEFINITION"
+  },
+  {
+    "question": "Comment perdre du poids sainement ?",
+    "answer": "Pour perdre du poids sainement : un deficit calorique modere (300 a 500 kcal), une alimentation equilibree riche en proteines, du cardio et de la musculation, et un bon sommeil. La progressivite et la regularite priment sur les regimes extremes.",
+    "concepts": [
+      "perte_de_poids",
+      "deficit_calorique",
+      "nutrition",
+      "cardio",
+      "sommeil"
+    ],
+    "intent": "QUESTION"
+  },
+  {
+    "question": "Comment prendre de la masse musculaire ?",
+    "answer": "Pour prendre de la masse : un leger surplus calorique (200 a 300 kcal), 1,6 a 2,2 g de proteines par kg de poids de corps, un entrainement de musculation progressif et un sommeil suffisant.",
+    "concepts": [
+      "prise_de_masse",
+      "surplus_calorique",
+      "proteines",
+      "musculation",
+      "sommeil"
+    ],
+    "intent": "QUESTION"
+  },
+  {
+    "question": "Combien de proteines par jour ?",
+    "answer": "Pour un pratiquant de musculation, on recommande generalement 1,6 a 2,2 g de proteines par kg de poids de corps et par jour, reparties sur les repas.",
+    "concepts": [
+      "proteines",
+      "nutrition",
+      "musculation"
+    ],
+    "intent": "QUESTION"
+  },
+  {
+    "question": "A quoi servent les glucides ?",
+    "answer": "Les glucides sont le carburant principal de l'effort : ils remplissent les reserves de glycogene et soutiennent la performance en entrainement, surtout pour le cardio intense.",
+    "concepts": [
+      "glucides",
+      "nutrition",
+      "entrainement",
+      "cardio"
+    ],
+    "intent": "QUESTION"
+  },
+  {
+    "question": "A quoi servent les lipides ?",
+    "answer": "Les lipides participent a la production hormonale et a l'absorption de certaines vitamines. Il ne faut jamais les supprimer, meme en seche : viser environ 1 g par kg de poids de corps.",
+    "concepts": [
+      "lipides",
+      "nutrition",
+      "seche"
+    ],
+    "intent": "QUESTION"
+  },
+  {
+    "question": "Combien de series et de repetitions pour prendre du muscle ?",
+    "answer": "Pour l'hypertrophie, la reference est 3 a 5 series de 6 a 12 repetitions par exercice, avec 10 a 20 series par groupe musculaire et par semaine, en augmentant progressivement les charges.",
+    "concepts": [
+      "series",
+      "repetitions",
+      "hypertrophie",
+      "musculation"
+    ],
+    "intent": "QUESTION"
+  },
+  {
+    "question": "Quels sont les meilleurs exercices de musculation ?",
+    "answer": "Les exercices polyarticulaires de base sont les plus efficaces : squat, souleve de terre, developpe couche, tractions et rowing. Ils recrutent plusieurs groupes musculaires a la fois.",
+    "concepts": [
+      "musculation",
+      "squat",
+      "souleve_de_terre",
+      "developpe_couche",
+      "force"
+    ],
+    "intent": "QUESTION"
+  },
+  {
+    "question": "Pourquoi le sommeil est-il important pour le sportif ?",
+    "answer": "Le sommeil est le premier outil de recuperation : c'est pendant la nuit que le muscle se repare et que les hormones de croissance sont secretees. Viser 7 a 9 heures par nuit.",
+    "concepts": [
+      "sommeil",
+      "recuperation",
+      "musculation"
+    ],
+    "intent": "QUESTION"
+  },
+  {
+    "question": "Quelle est la difference entre prise de masse et seche ?",
+    "answer": "La prise de masse vise a construire du muscle avec un surplus calorique, la seche vise a perdre du gras avec un deficit calorique. Les deux gardent musculation et proteines comme piliers.",
+    "concepts": [
+      "prise_de_masse",
+      "seche",
+      "surplus_calorique",
+      "deficit_calorique"
+    ],
+    "intent": "COMPARAISON"
+  },
+  {
+    "question": "Cardio ou musculation pour perdre du poids ?",
+    "answer": "Les deux sont complementaires : le cardio augmente la depense calorique, la musculation preserve le muscle et maintient le metabolisme. L'ideal est de combiner les deux avec un deficit calorique modere.",
+    "concepts": [
+      "cardio",
+      "musculation",
+      "perte_de_poids",
+      "deficit_calorique",
+      "metabolisme"
+    ],
     "intent": "COMPARAISON"
   }
 ]

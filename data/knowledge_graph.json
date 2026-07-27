@@ -1,71 +1,534 @@
 {
   "concepts": [
-    "sport", "football", "basketball", "tennis", "rugby", "handball",
-    "volleyball", "natation", "athletisme", "cyclisme", "course",
-    "marathon", "sprint", "musculation", "cardio", "endurance", "force",
-    "souplesse", "etirement", "echauffement", "recuperation",
-    "hydratation", "nutrition", "proteines", "blessure", "crampes",
-    "entrainement", "competition", "equipe", "arbitre", "ballon",
-    "raquette", "piscine", "jeux_olympiques", "coupe_du_monde", "vo2max"
+    "sport",
+    "football",
+    "basketball",
+    "tennis",
+    "rugby",
+    "handball",
+    "volleyball",
+    "natation",
+    "athletisme",
+    "cyclisme",
+    "course",
+    "marathon",
+    "sprint",
+    "musculation",
+    "cardio",
+    "endurance",
+    "force",
+    "souplesse",
+    "etirement",
+    "echauffement",
+    "recuperation",
+    "hydratation",
+    "nutrition",
+    "proteines",
+    "blessure",
+    "crampes",
+    "entrainement",
+    "competition",
+    "equipe",
+    "arbitre",
+    "ballon",
+    "raquette",
+    "piscine",
+    "jeux_olympiques",
+    "coupe_du_monde",
+    "vo2max",
+    "prise_de_masse",
+    "perte_de_poids",
+    "seche",
+    "calories",
+    "deficit_calorique",
+    "surplus_calorique",
+    "glucides",
+    "lipides",
+    "metabolisme",
+    "sommeil",
+    "hypertrophie",
+    "series",
+    "repetitions",
+    "squat",
+    "developpe_couche",
+    "souleve_de_terre",
+    "imc"
   ],
   "relations": [
-    {"src": "football", "dst": "sport", "weight": 0.9},
-    {"src": "basketball", "dst": "sport", "weight": 0.9},
-    {"src": "tennis", "dst": "sport", "weight": 0.9},
-    {"src": "rugby", "dst": "sport", "weight": 0.9},
-    {"src": "handball", "dst": "sport", "weight": 0.85},
-    {"src": "volleyball", "dst": "sport", "weight": 0.85},
-    {"src": "natation", "dst": "sport", "weight": 0.9},
-    {"src": "athletisme", "dst": "sport", "weight": 0.9},
-    {"src": "cyclisme", "dst": "sport", "weight": 0.85},
-    {"src": "football", "dst": "ballon", "weight": 0.9},
-    {"src": "basketball", "dst": "ballon", "weight": 0.85},
-    {"src": "rugby", "dst": "ballon", "weight": 0.8},
-    {"src": "handball", "dst": "ballon", "weight": 0.8},
-    {"src": "volleyball", "dst": "ballon", "weight": 0.75},
-    {"src": "football", "dst": "equipe", "weight": 0.85},
-    {"src": "basketball", "dst": "equipe", "weight": 0.85},
-    {"src": "rugby", "dst": "equipe", "weight": 0.85},
-    {"src": "handball", "dst": "equipe", "weight": 0.8},
-    {"src": "volleyball", "dst": "equipe", "weight": 0.8},
-    {"src": "football", "dst": "coupe_du_monde", "weight": 0.8},
-    {"src": "rugby", "dst": "coupe_du_monde", "weight": 0.7},
-    {"src": "football", "dst": "arbitre", "weight": 0.7},
-    {"src": "rugby", "dst": "arbitre", "weight": 0.7},
-    {"src": "basketball", "dst": "arbitre", "weight": 0.65},
-    {"src": "tennis", "dst": "raquette", "weight": 0.9},
-    {"src": "tennis", "dst": "competition", "weight": 0.7},
-    {"src": "natation", "dst": "piscine", "weight": 0.9},
-    {"src": "natation", "dst": "cardio", "weight": 0.8},
-    {"src": "natation", "dst": "jeux_olympiques", "weight": 0.75},
-    {"src": "athletisme", "dst": "course", "weight": 0.85},
-    {"src": "athletisme", "dst": "jeux_olympiques", "weight": 0.8},
-    {"src": "course", "dst": "cardio", "weight": 0.8},
-    {"src": "marathon", "dst": "course", "weight": 0.9},
-    {"src": "marathon", "dst": "endurance", "weight": 0.9},
-    {"src": "marathon", "dst": "athletisme", "weight": 0.85},
-    {"src": "sprint", "dst": "course", "weight": 0.9},
-    {"src": "sprint", "dst": "force", "weight": 0.7},
-    {"src": "cyclisme", "dst": "endurance", "weight": 0.8},
-    {"src": "cardio", "dst": "endurance", "weight": 0.85},
-    {"src": "cardio", "dst": "entrainement", "weight": 0.8},
-    {"src": "cardio", "dst": "vo2max", "weight": 0.75},
-    {"src": "endurance", "dst": "vo2max", "weight": 0.8},
-    {"src": "musculation", "dst": "force", "weight": 0.9},
-    {"src": "musculation", "dst": "entrainement", "weight": 0.8},
-    {"src": "musculation", "dst": "proteines", "weight": 0.7},
-    {"src": "entrainement", "dst": "echauffement", "weight": 0.8},
-    {"src": "entrainement", "dst": "etirement", "weight": 0.7},
-    {"src": "entrainement", "dst": "recuperation", "weight": 0.8},
-    {"src": "etirement", "dst": "souplesse", "weight": 0.85},
-    {"src": "echauffement", "dst": "blessure", "weight": 0.7},
-    {"src": "recuperation", "dst": "hydratation", "weight": 0.7},
-    {"src": "recuperation", "dst": "nutrition", "weight": 0.7},
-    {"src": "nutrition", "dst": "proteines", "weight": 0.85},
-    {"src": "hydratation", "dst": "crampes", "weight": 0.7},
-    {"src": "blessure", "dst": "crampes", "weight": 0.6},
-    {"src": "competition", "dst": "sport", "weight": 0.8},
-    {"src": "jeux_olympiques", "dst": "competition", "weight": 0.85},
-    {"src": "coupe_du_monde", "dst": "competition", "weight": 0.85}
+    {
+      "src": "football",
+      "dst": "sport",
+      "weight": 0.9
+    },
+    {
+      "src": "basketball",
+      "dst": "sport",
+      "weight": 0.9
+    },
+    {
+      "src": "tennis",
+      "dst": "sport",
+      "weight": 0.9
+    },
+    {
+      "src": "rugby",
+      "dst": "sport",
+      "weight": 0.9
+    },
+    {
+      "src": "handball",
+      "dst": "sport",
+      "weight": 0.85
+    },
+    {
+      "src": "volleyball",
+      "dst": "sport",
+      "weight": 0.85
+    },
+    {
+      "src": "natation",
+      "dst": "sport",
+      "weight": 0.9
+    },
+    {
+      "src": "athletisme",
+      "dst": "sport",
+      "weight": 0.9
+    },
+    {
+      "src": "cyclisme",
+      "dst": "sport",
+      "weight": 0.85
+    },
+    {
+      "src": "football",
+      "dst": "ballon",
+      "weight": 0.9
+    },
+    {
+      "src": "basketball",
+      "dst": "ballon",
+      "weight": 0.85
+    },
+    {
+      "src": "rugby",
+      "dst": "ballon",
+      "weight": 0.8
+    },
+    {
+      "src": "handball",
+      "dst": "ballon",
+      "weight": 0.8
+    },
+    {
+      "src": "volleyball",
+      "dst": "ballon",
+      "weight": 0.75
+    },
+    {
+      "src": "football",
+      "dst": "equipe",
+      "weight": 0.85
+    },
+    {
+      "src": "basketball",
+      "dst": "equipe",
+      "weight": 0.85
+    },
+    {
+      "src": "rugby",
+      "dst": "equipe",
+      "weight": 0.85
+    },
+    {
+      "src": "handball",
+      "dst": "equipe",
+      "weight": 0.8
+    },
+    {
+      "src": "volleyball",
+      "dst": "equipe",
+      "weight": 0.8
+    },
+    {
+      "src": "football",
+      "dst": "coupe_du_monde",
+      "weight": 0.8
+    },
+    {
+      "src": "rugby",
+      "dst": "coupe_du_monde",
+      "weight": 0.7
+    },
+    {
+      "src": "football",
+      "dst": "arbitre",
+      "weight": 0.7
+    },
+    {
+      "src": "rugby",
+      "dst": "arbitre",
+      "weight": 0.7
+    },
+    {
+      "src": "basketball",
+      "dst": "arbitre",
+      "weight": 0.65
+    },
+    {
+      "src": "tennis",
+      "dst": "raquette",
+      "weight": 0.9
+    },
+    {
+      "src": "tennis",
+      "dst": "competition",
+      "weight": 0.7
+    },
+    {
+      "src": "natation",
+      "dst": "piscine",
+      "weight": 0.9
+    },
+    {
+      "src": "natation",
+      "dst": "cardio",
+      "weight": 0.8
+    },
+    {
+      "src": "natation",
+      "dst": "jeux_olympiques",
+      "weight": 0.75
+    },
+    {
+      "src": "athletisme",
+      "dst": "course",
+      "weight": 0.85
+    },
+    {
+      "src": "athletisme",
+      "dst": "jeux_olympiques",
+      "weight": 0.8
+    },
+    {
+      "src": "course",
+      "dst": "cardio",
+      "weight": 0.8
+    },
+    {
+      "src": "marathon",
+      "dst": "course",
+      "weight": 0.9
+    },
+    {
+      "src": "marathon",
+      "dst": "endurance",
+      "weight": 0.9
+    },
+    {
+      "src": "marathon",
+      "dst": "athletisme",
+      "weight": 0.85
+    },
+    {
+      "src": "sprint",
+      "dst": "course",
+      "weight": 0.9
+    },
+    {
+      "src": "sprint",
+      "dst": "force",
+      "weight": 0.7
+    },
+    {
+      "src": "cyclisme",
+      "dst": "endurance",
+      "weight": 0.8
+    },
+    {
+      "src": "cardio",
+      "dst": "endurance",
+      "weight": 0.85
+    },
+    {
+      "src": "cardio",
+      "dst": "entrainement",
+      "weight": 0.8
+    },
+    {
+      "src": "cardio",
+      "dst": "vo2max",
+      "weight": 0.75
+    },
+    {
+      "src": "endurance",
+      "dst": "vo2max",
+      "weight": 0.8
+    },
+    {
+      "src": "musculation",
+      "dst": "force",
+      "weight": 0.9
+    },
+    {
+      "src": "musculation",
+      "dst": "entrainement",
+      "weight": 0.8
+    },
+    {
+      "src": "musculation",
+      "dst": "proteines",
+      "weight": 0.7
+    },
+    {
+      "src": "entrainement",
+      "dst": "echauffement",
+      "weight": 0.8
+    },
+    {
+      "src": "entrainement",
+      "dst": "etirement",
+      "weight": 0.7
+    },
+    {
+      "src": "entrainement",
+      "dst": "recuperation",
+      "weight": 0.8
+    },
+    {
+      "src": "etirement",
+      "dst": "souplesse",
+      "weight": 0.85
+    },
+    {
+      "src": "echauffement",
+      "dst": "blessure",
+      "weight": 0.7
+    },
+    {
+      "src": "recuperation",
+      "dst": "hydratation",
+      "weight": 0.7
+    },
+    {
+      "src": "recuperation",
+      "dst": "nutrition",
+      "weight": 0.7
+    },
+    {
+      "src": "nutrition",
+      "dst": "proteines",
+      "weight": 0.85
+    },
+    {
+      "src": "hydratation",
+      "dst": "crampes",
+      "weight": 0.7
+    },
+    {
+      "src": "blessure",
+      "dst": "crampes",
+      "weight": 0.6
+    },
+    {
+      "src": "competition",
+      "dst": "sport",
+      "weight": 0.8
+    },
+    {
+      "src": "jeux_olympiques",
+      "dst": "competition",
+      "weight": 0.85
+    },
+    {
+      "src": "coupe_du_monde",
+      "dst": "competition",
+      "weight": 0.85
+    },
+    {
+      "src": "prise_de_masse",
+      "dst": "musculation",
+      "weight": 0.9
+    },
+    {
+      "src": "prise_de_masse",
+      "dst": "surplus_calorique",
+      "weight": 0.85
+    },
+    {
+      "src": "prise_de_masse",
+      "dst": "proteines",
+      "weight": 0.8
+    },
+    {
+      "src": "prise_de_masse",
+      "dst": "nutrition",
+      "weight": 0.8
+    },
+    {
+      "src": "perte_de_poids",
+      "dst": "deficit_calorique",
+      "weight": 0.9
+    },
+    {
+      "src": "perte_de_poids",
+      "dst": "cardio",
+      "weight": 0.75
+    },
+    {
+      "src": "perte_de_poids",
+      "dst": "nutrition",
+      "weight": 0.85
+    },
+    {
+      "src": "seche",
+      "dst": "perte_de_poids",
+      "weight": 0.8
+    },
+    {
+      "src": "seche",
+      "dst": "musculation",
+      "weight": 0.75
+    },
+    {
+      "src": "seche",
+      "dst": "proteines",
+      "weight": 0.7
+    },
+    {
+      "src": "surplus_calorique",
+      "dst": "calories",
+      "weight": 0.9
+    },
+    {
+      "src": "deficit_calorique",
+      "dst": "calories",
+      "weight": 0.9
+    },
+    {
+      "src": "calories",
+      "dst": "nutrition",
+      "weight": 0.85
+    },
+    {
+      "src": "calories",
+      "dst": "metabolisme",
+      "weight": 0.8
+    },
+    {
+      "src": "glucides",
+      "dst": "nutrition",
+      "weight": 0.85
+    },
+    {
+      "src": "glucides",
+      "dst": "calories",
+      "weight": 0.7
+    },
+    {
+      "src": "lipides",
+      "dst": "nutrition",
+      "weight": 0.8
+    },
+    {
+      "src": "lipides",
+      "dst": "calories",
+      "weight": 0.7
+    },
+    {
+      "src": "proteines",
+      "dst": "calories",
+      "weight": 0.6
+    },
+    {
+      "src": "imc",
+      "dst": "perte_de_poids",
+      "weight": 0.6
+    },
+    {
+      "src": "imc",
+      "dst": "nutrition",
+      "weight": 0.5
+    },
+    {
+      "src": "sommeil",
+      "dst": "recuperation",
+      "weight": 0.9
+    },
+    {
+      "src": "sommeil",
+      "dst": "metabolisme",
+      "weight": 0.6
+    },
+    {
+      "src": "hypertrophie",
+      "dst": "musculation",
+      "weight": 0.9
+    },
+    {
+      "src": "hypertrophie",
+      "dst": "series",
+      "weight": 0.7
+    },
+    {
+      "src": "hypertrophie",
+      "dst": "proteines",
+      "weight": 0.75
+    },
+    {
+      "src": "series",
+      "dst": "repetitions",
+      "weight": 0.85
+    },
+    {
+      "src": "series",
+      "dst": "entrainement",
+      "weight": 0.7
+    },
+    {
+      "src": "repetitions",
+      "dst": "musculation",
+      "weight": 0.7
+    },
+    {
+      "src": "squat",
+      "dst": "musculation",
+      "weight": 0.85
+    },
+    {
+      "src": "squat",
+      "dst": "force",
+      "weight": 0.8
+    },
+    {
+      "src": "developpe_couche",
+      "dst": "musculation",
+      "weight": 0.85
+    },
+    {
+      "src": "developpe_couche",
+      "dst": "force",
+      "weight": 0.75
+    },
+    {
+      "src": "souleve_de_terre",
+      "dst": "musculation",
+      "weight": 0.85
+    },
+    {
+      "src": "souleve_de_terre",
+      "dst": "force",
+      "weight": 0.8
+    },
+    {
+      "src": "cardio",
+      "dst": "calories",
+      "weight": 0.7
+    },
+    {
+      "src": "recuperation",
+      "dst": "sommeil",
+      "weight": 0.85
+    }
   ]
 }
