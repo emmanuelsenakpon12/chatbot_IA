@@ -52,7 +52,8 @@
     "squat",
     "developpe_couche",
     "souleve_de_terre",
-    "imc"
+    "imc",
+    "poids"
   ],
   "relations": [
     {
@@ -529,6 +530,26 @@
       "src": "recuperation",
       "dst": "sommeil",
       "weight": 0.85
+    },
+    {
+      "src": "poids",
+      "dst": "perte_de_poids",
+      "weight": 0.85
+    },
+    {
+      "src": "poids",
+      "dst": "prise_de_masse",
+      "weight": 0.85
+    },
+    {
+      "src": "poids",
+      "dst": "imc",
+      "weight": 0.7
+    },
+    {
+      "src": "poids",
+      "dst": "calories",
+      "weight": 0.7
     }
   ]
 }

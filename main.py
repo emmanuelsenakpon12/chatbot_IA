@@ -1,20 +1,134 @@
-"""Point d'entree du ChatBot IA (domaine : sport).
+"""
+main.py - Point d'entree et orchestrateur du ChatBot IA (Etape 5)
 
-Etape 1 : chargement et verification de la base de connaissances.
-Les etapes suivantes brancheront NLPEngine, SearchEngine et LearningEngine.
+Pipeline complet d'une question :
+  1. Pretraitement (tokens bruts pour l'intention, stemmes pour TF-IDF)
+  2. Classification d'intention : regles (V1) puis Naive Bayes (V2)
+     si les regles ne concluent pas
+  3. Gestion des intentions speciales (SALUTATION, QUITTER)
+  4. Extraction d'entites (concepts du graphe)
+  5. Recherche dans le graphe (SearchEngine.find_best_answer)
+  6. Re-ranking des candidats par TF-IDF (LearningEngine.rank_answers)
+  7. Retour de la reponse (+ feedback optionnel via l'UI)
 """
 
+import os
+
 from knowledge_base import KnowledgeBase
+from learning_engine import LearningEngine
+from nlp_engine import NLPEngine
+from search_engine import SearchEngine
+
+REPONSE_INCONNUE = ("Je n'ai pas trouve de reponse a cette question. "
+                    "Essayez de reformuler ou posez une question sur le "
+                    "sport, la musculation ou la nutrition.")
+
+
+class ChatBot:
+    """Orchestrateur principal : relie les 4 modules du systeme."""
+
+    # Exemples supplementaires pour entrainer Naive Bayes sur les
+    # intentions absentes des paires Q/R (salutation, quitter)
+    _EXEMPLES_NB = [
+        (["bonjour"], "SALUTATION"),
+        (["salut", "ca", "va"], "SALUTATION"),
+        (["bonsoir"], "SALUTATION"),
+        (["hello"], "SALUTATION"),
+        (["coucou"], "SALUTATION"),
+        (["quitter"], "QUITTER"),
+        (["au", "revoir"], "QUITTER"),
+        (["bye"], "QUITTER"),
+        (["exit"], "QUITTER"),
+        (["stop"], "QUITTER"),
+    ]
+
+    def __init__(self, data_dir: str = "data/") -> None:
+        self.kb = KnowledgeBase()
+        self.nlp = NLPEngine()
+        self.search = SearchEngine(self.kb)
+        self.learner = LearningEngine(self.kb)
+        self._load_data(data_dir)
+
+    # ------------------------------------------------------------------
+    def _load_data(self, data_dir: str) -> None:
+        """Charge le graphe, les Q/R, le feedback, puis entraine les modeles."""
+        self.data_dir = data_dir
+        self.kb.load_from_json(os.path.join(data_dir, "knowledge_graph.json"))
+        self.kb.load_qa_pairs(os.path.join(data_dir, "qa_pairs.json"))
+        self.learner.load_feedback(os.path.join(data_dir, "feedback_log.json"))
+
+        # TF-IDF sur les documents question+reponse pretraites
+        documents = [self.nlp.preprocess(p["question"] + " " + p["answer"])
+                     for p in self.kb.qa_pairs]
+        self.learner.build_tfidf(documents)
+
+        # Naive Bayes : questions du corpus (tokens bruts) + exemples dedies
+        X = [self.nlp.tokenize(p["question"]) for p in self.kb.qa_pairs]
+        y = [p["intent"] for p in self.kb.qa_pairs]
+        for tokens, intent in self._EXEMPLES_NB:
+            X.append(tokens)
+            y.append(intent)
+        self.learner.train_naive_bayes(X, y)
+
+    # ------------------------------------------------------------------
+    def answer(self, user_input: str) -> str:
+        """Pipeline complet de traitement d'une question."""
+        if not user_input or not user_input.strip():
+            return "Je vous ecoute ! Posez-moi une question sur le sport."
+
+        # 1. Pretraitement : deux flux (voir note de conception nlp_engine)
+        tokens_bruts = self.nlp.tokenize(user_input)
+        tokens_pre = self.nlp.preprocess(user_input)
+
+        # 2. Intention : regles V1, puis Naive Bayes V2 en secours
+        intent = self.nlp.classify_intent(tokens_bruts)
+        if intent == "INCONNU":
+            prediction = self.learner.predict_intent(tokens_bruts)
+            if prediction:
+                intent = prediction
+
+        # 3. Intentions speciales
+        if intent == "SALUTATION":
+            return ("Bonjour ! Je suis votre assistant sport, musculation "
+                    "et nutrition. Comment puis-je vous aider ?")
+        if intent == "QUITTER":
+            return "Au revoir, et bon entrainement !"
+
+        # 4. Extraction d'entites
+        entities = self.nlp.extract_entities(tokens_bruts, self.kb)
+        if not entities:
+            return REPONSE_INCONNUE
+
+        # 5. Recherche dans le graphe : meilleure reponse + candidats
+        raw_answer = self.search.find_best_answer(entities, intent)
+        candidats = self.kb.qa_for_concepts(entities)
+        if raw_answer and all(p["answer"] != raw_answer for p in candidats):
+            candidats = candidats + [{"question": "", "answer": raw_answer}]
+        if not candidats:
+            return REPONSE_INCONNUE
+
+        # 6. Re-ranking par TF-IDF (+ bonus feedback)
+        ranked = self.learner.rank_answers(tokens_pre, candidats)
+
+        # 7. Reponse
+        if not ranked:
+            return REPONSE_INCONNUE
+        meilleur = ranked[0]
+        return meilleur["answer"] if isinstance(meilleur, dict) else meilleur
+
+    # ------------------------------------------------------------------
+    def give_feedback(self, question: str, reponse: str, score: int) -> None:
+        """Enregistre un feedback, re-entraine et persiste le journal."""
+        self.learner.record_feedback(question, reponse, score)
+        self.learner.retrain()
+        self.learner.save_feedback(
+            os.path.join(self.data_dir, "feedback_log.json"))
 
 
 def main() -> None:
-    kb = KnowledgeBase()
-    kb.load_from_json("data/knowledge_graph.json")
-    kb.load_qa_pairs("data/qa_pairs.json")
-    print(kb)
-    print("Exemple - voisins de 'football' :", kb.get_neighbors("football"))
-    print("Exemple - Q/R liees a 'marathon' :",
-          [p["question"] for p in kb.qa_for_concepts(["marathon"])])
+    from ui import run_cli
+    bot = ChatBot(os.path.join(os.path.dirname(__file__), "data/"))
+    run_cli(bot)
 
 
 if __name__ == "__main__":
