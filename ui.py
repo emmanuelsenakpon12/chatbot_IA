@@ -127,8 +127,18 @@ def create_app(bot):
  .fb{font-size:.85rem;color:#666;margin:.4rem 0 0}
  .fb button{padding:.1rem .45rem;margin-right:.2rem;cursor:pointer}
  .composer{border-top:1px solid var(--border);padding:1rem 1.5rem 1.25rem}
- form{display:flex;gap:.5rem}input[type=text]{flex:1;padding:.5rem}
- button{padding:.5rem 1rem}
+ .composer-form{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:.5rem;
+                background:var(--bg);border:1px solid var(--border);border-radius:26px;
+                padding:.4rem .5rem .4rem 1.1rem}
+ .composer-form:focus-within{border-color:var(--blue-500);box-shadow:0 0 0 3px var(--blue-100)}
+ .composer-form input{flex:1;border:none;background:transparent;font:inherit;font-size:.93rem;
+                       padding:.5rem 0;outline:none;color:var(--text)}
+ .send-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--blue-500);
+           color:#fff;font-size:1rem;cursor:pointer;flex-shrink:0;
+           display:flex;align-items:center;justify-content:center}
+ .send-btn:hover{background:var(--blue-600)}
+ .composer-hint{max-width:720px;margin:.5rem auto 0;text-align:center;font-size:.72rem;
+                color:var(--text-muted)}
 </style></head><body>
 <div class='app'>
 <aside class='sidebar' id='sidebar'>
@@ -141,10 +151,11 @@ def create_app(bot):
 <header class='chat-header'><h1 id='chatTitle'>Nouvelle discussion</h1></header>
 <div id='log' class='log'></div>
 <div class='composer'>
-<form id='chat'>
- <input type='text' id='q' placeholder='Votre question...' autocomplete='off' autofocus>
- <button type='submit'>Envoyer</button>
+<form id='chat' class='composer-form'>
+ <input type='text' id='q' placeholder='Envoyer un message...' autocomplete='off' autofocus>
+ <button type='submit' class='send-btn' aria-label='Envoyer'>&#8593;</button>
 </form>
+<p class='composer-hint'>Sport, musculation &amp; nutrition</p>
 </div>
 </main>
 </div>
