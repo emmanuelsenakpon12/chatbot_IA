@@ -124,8 +124,14 @@ def create_app(bot):
                       border-radius:18px 18px 4px 18px}
  .msg.bot .msg-body{background:transparent;color:var(--text);padding:.15rem 0;max-width:100%}
  .msg-text{white-space:pre-wrap;line-height:1.5;font-size:.93rem}
- .fb{font-size:.85rem;color:#666;margin:.4rem 0 0}
- .fb button{padding:.1rem .45rem;margin-right:.2rem;cursor:pointer}
+ .fb{display:flex;align-items:center;gap:.3rem;margin-top:.4rem;
+     font-size:.78rem;color:var(--text-muted)}
+ .fb-label{margin-right:.25rem}
+ .fb-btn{width:24px;height:24px;border-radius:50%;border:1px solid var(--border);
+         background:var(--surface);cursor:pointer;font-size:.72rem;color:var(--text-muted);
+         display:flex;align-items:center;justify-content:center}
+ .fb-btn:hover{border-color:var(--blue-500);color:var(--blue-600);background:var(--blue-50)}
+ .fb-done{color:var(--blue-600);font-weight:500}
  .composer{border-top:1px solid var(--border);padding:1rem 1.5rem 1.25rem}
  .composer-form{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:.5rem;
                 background:var(--bg);border:1px solid var(--border);border-radius:26px;
@@ -293,12 +299,12 @@ function renderLog(){
     const zone=document.getElementById(m.id);
     if(m.noFeedback)return;
     if(m.feedback){
-      zone.textContent='Merci, feedback enregistre !';
+      zone.innerHTML=`<span class='fb-done'>Merci, feedback enregistre !</span>`;
       return;
     }
-    zone.innerHTML='Noter cette reponse : '+
-      [1,2,3,4,5].map(n=>`<button type='button' data-score='${n}'>${n}</button>`).join('');
-    zone.querySelectorAll('button').forEach(b=>{
+    zone.innerHTML=`<span class='fb-label'>Utile ?</span>`+
+      [1,2,3,4,5].map(n=>`<button type='button' class='fb-btn' data-score='${n}'>${n}</button>`).join('');
+    zone.querySelectorAll('.fb-btn').forEach(b=>{
       b.onclick=async()=>{
         const score=parseInt(b.dataset.score,10);
         await fetch('/feedback',{method:'POST',
@@ -306,7 +312,7 @@ function renderLog(){
           body:JSON.stringify({question:m.question,answer:m.text,score})});
         m.feedback=score;
         saveThreads();
-        zone.textContent='Merci, feedback enregistre !';
+        zone.innerHTML=`<span class='fb-done'>Merci, feedback enregistre !</span>`;
       };
     });
   });
