@@ -124,6 +124,33 @@ def test_candidats_entite_specifique_pas_ecrasee_par_entite_generique():
     assert "avant" in reponse.lower() and "glucides" in reponse.lower()
 
 
+def test_que_faire_apres_le_sport():
+    """Repere lors d'une campagne de test elargie : cette question
+    renvoyait la definition generique de la musculation au lieu de la
+    reponse dediee (paire desormais tagguee 'sport' en plus de ses
+    concepts nutrition/recuperation d'origine)."""
+    bot = _bot()
+    reponse = bot.answer("Que faire apres une seance de sport ?")
+    assert "etirer" in reponse.lower() or "rehydrater" in reponse.lower()
+
+
+def test_synonymes_familiers_de_sports():
+    """Noms courants des sports (foot, muscu, volley, hand, basket, velo)
+    doivent tous aboutir a une reponse pertinente."""
+    bot = _bot()
+    for question, mot_attendu in [
+        ("C'est quoi le foot ?", "football"),
+        ("Qu'est-ce que la muscu ?", "musculation"),
+        ("C'est quoi le volley ?", "volleyball"),
+        ("Qu'est-ce que le hand ?", "handball"),
+        ("C'est quoi le basket ?", "basketball"),
+        ("Le velo c'est quoi ?", "cyclisme"),
+    ]:
+        reponse = bot.answer(question)
+        assert reponse != REPONSE_INCONNUE, question
+        assert mot_attendu in reponse.lower(), (question, reponse)
+
+
 def test_robustesse_faute_de_frappe():
     bot = _bot()
     reponse = bot.answer("c'est quoi le footbal ?")

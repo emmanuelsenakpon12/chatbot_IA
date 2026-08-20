@@ -62,7 +62,13 @@
     "abdos",
     "gainage",
     "jambes",
-    "manger"
+    "manger",
+    "foot",
+    "muscu",
+    "volley",
+    "hand",
+    "basket",
+    "velo"
   ],
   "relations": [
     {
@@ -624,6 +630,36 @@
       "src": "manger",
       "dst": "nutrition",
       "weight": 0.8
+    },
+    {
+      "src": "foot",
+      "dst": "football",
+      "weight": 0.9
+    },
+    {
+      "src": "muscu",
+      "dst": "musculation",
+      "weight": 0.9
+    },
+    {
+      "src": "volley",
+      "dst": "volleyball",
+      "weight": 0.9
+    },
+    {
+      "src": "hand",
+      "dst": "handball",
+      "weight": 0.9
+    },
+    {
+      "src": "basket",
+      "dst": "basketball",
+      "weight": 0.9
+    },
+    {
+      "src": "velo",
+      "dst": "cyclisme",
+      "weight": 0.85
     }
   ]
 }

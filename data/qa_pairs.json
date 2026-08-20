@@ -352,7 +352,8 @@
       "recuperation",
       "etirement",
       "hydratation",
-      "proteines"
+      "proteines",
+      "sport"
     ],
     "intent": "QUESTION"
   },

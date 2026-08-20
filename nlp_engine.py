@@ -282,6 +282,14 @@ class NLPEngine:
             seuil = 1 if len(token) < 6 else 2
             best_concept, best_dist = None, seuil + 1
             for concept in concepts:
+                # Un concept court (< 5 caracteres, ex. "foot", "hand")
+                # n'est jamais une cible fiable pour le rapprochement flou :
+                # a distance 1, il collisionne avec des mots francais
+                # courants sans rapport (ex. "font" -> "foot"). Ces
+                # concepts restent bien sur accessibles par correspondance
+                # exacte ou par racine (etapes 1 et 2 ci-dessus).
+                if len(concept) < 5:
+                    continue
                 # borne rapide : difference de longueur > seuil => inutile
                 if abs(len(concept) - len(token)) > seuil:
                     continue

@@ -111,6 +111,34 @@ def test_extract_entities_aucun_concept():
     assert nlp.extract_entities(tokens, kb) == []
 
 
+def test_extract_entities_synonymes_familiers():
+    """Noms courants/familiers des sports (bat lie via alias direct dans
+    le graphe, pas par Levenshtein)."""
+    nlp, kb = _nlp(), _kb()
+    for mot, concept in [
+        ("foot", "foot"), ("muscu", "muscu"), ("volley", "volley"),
+        ("hand", "hand"), ("basket", "basket"), ("velo", "velo"),
+    ]:
+        assert concept in nlp.extract_entities(nlp.tokenize(mot), kb)
+
+
+def test_extract_entities_pas_de_collision_sur_courts_concepts():
+    """Regression : un concept court (< 5 caracteres, ex. 'foot') ne doit
+    jamais etre atteint par rapprochement flou (Levenshtein) depuis un mot
+    francais courant sans rapport. Repere avec 'font' (verbe faire) qui
+    tombait sur le concept 'foot' a distance d'edition 1."""
+    nlp, kb = _nlp(), _kb()
+    assert nlp.extract_entities(["font"], kb) == []
+    assert nlp.extract_entities(nlp.tokenize("combien font 2 plus 2"), kb) == []
+
+
+def test_extract_entities_typo_courir_reste_matche():
+    """Non-regression : la correction du faux positif ci-dessus ne doit
+    pas casser un rapprochement legitime existant (courir -> course)."""
+    nlp, kb = _nlp(), _kb()
+    assert "course" in nlp.extract_entities(["courir"], kb)
+
+
 # ----------------------------------------------------------------------
 # BENCHMARK SUJET : >= 80% de precision d'intention sur 20 questions
 # ----------------------------------------------------------------------
