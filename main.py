@@ -23,6 +23,12 @@ REPONSE_INCONNUE = ("Je n'ai pas trouve de reponse a cette question. "
                     "Essayez de reformuler ou posez une question sur le "
                     "sport, la musculation ou la nutrition.")
 
+# Nombre max de messages d'historique examines pour resoudre une relance
+# sans sujet propre. Bornage cote serveur (independant de ce que l'appelant
+# transmet) : un appel direct de l'API /ask pourrait sinon envoyer un
+# historique de taille arbitraire.
+HISTORIQUE_MAX_EXAMINE = 5
+
 
 class ChatBot:
     """Orchestrateur principal : relie les 4 modules du systeme."""
@@ -131,7 +137,7 @@ class ChatBot:
             # un message qui a lui-meme un sujet : une chaine de relances
             # ("pourquoi ?" puis encore "pourquoi ?") ne doit pas s'arreter
             # sur le message precedent s'il est lui aussi sans entite.
-            for message in reversed(historique):
+            for message in reversed(historique[-HISTORIQUE_MAX_EXAMINE:]):
                 candidates = self.nlp.extract_entities(
                     self.nlp.tokenize(message), self.kb)
                 if candidates:

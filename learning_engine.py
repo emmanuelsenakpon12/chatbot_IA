@@ -309,6 +309,10 @@ class LearningEngine:
                 self.feedback_log = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             self.feedback_log = []
+        # Reconstruit entierement _feedback_boost a partir du journal
+        # charge : sans cette remise a zero, un second appel (rechargement)
+        # cumulerait les boosts en double au-dessus de ceux deja calcules.
+        self._feedback_boost = defaultdict(float)
         for fb in self.feedback_log:
             if fb.get("score", 3) >= 4:
                 self._feedback_boost[fb["answer"]] += 1.0

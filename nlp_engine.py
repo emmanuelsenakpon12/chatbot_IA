@@ -125,7 +125,14 @@ class NLPEngine:
         """Decoupe le texte en tokens minuscules, gere ponctuation,
         apostrophes (l'endurance -> l endurance) et accents typographiques."""
         text = text.replace("\u2019", "'").replace("\u2018", "'")
-        text = re.sub(r"([a-zA-Za-yA-ÿà-ÿ])'", r"\1 ", text)
+        # Classe de caracteres = toute lettre latine (ascii + accentuee,
+        # majuscule ou minuscule) immediatement suivie d'une apostrophe.
+        # L'ancienne classe [a-zA-Za-yA-ÿà-ÿ] contenait une plage bugguee
+        # "A-y" qui couvrait aussi involontairement [\]^_` en ASCII : sans
+        # consequence observable en pratique (ces symboles n'apparaissent
+        # jamais juste avant une apostrophe dans une vraie phrase), mais
+        # corrigee ici par exactitude.
+        text = re.sub(r"([a-zA-ZÀ-ÖØ-öø-ÿ])'", r"\1 ", text)
         text = self._strip_accents(text.lower())
         text = re.sub(r"[^a-z0-9_\s]", " ", text)
         return [t for t in text.split() if t]

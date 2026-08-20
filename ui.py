@@ -422,7 +422,9 @@ renderLog();
     def ask():
         data = request.get_json(silent=True) or {}
         question = data.get("question", "")
-        history = data.get("history", "")
+        if not isinstance(question, str):
+            question = ""  # entree malformee (client bugue ou appel API direct)
+        history = data.get("history", [])
         historique = [h for h in history if isinstance(h, str)] \
             if isinstance(history, list) else None
         return jsonify({"answer": bot.answer(question, historique=historique)})
@@ -433,7 +435,7 @@ renderLog();
         try:
             bot.give_feedback(data["question"], data["answer"],
                               int(data["score"]))
-        except (KeyError, ValueError):
+        except (KeyError, ValueError, TypeError):
             return jsonify({"ok": False}), 400
         return jsonify({"ok": True})
 
