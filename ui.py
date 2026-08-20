@@ -105,6 +105,15 @@ def create_app(bot):
  .chat-header h1{font-size:.95rem;font-weight:600;margin:0}
  .log{flex:1;overflow-y:auto;padding:1.25rem 1.5rem;background:#fafafa}
  .log-inner{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:1rem}
+ .welcome{max-width:560px;margin:3rem auto;text-align:center;
+          display:flex;flex-direction:column;align-items:center;gap:1rem}
+ .welcome-avatar{width:56px;height:56px;border-radius:50%;background:var(--blue-100);
+                  display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+ .welcome h2{font-size:1.3rem;margin:0;font-weight:600}
+ .suggestions{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-top:.5rem}
+ .chip{background:var(--blue-50);border:1px solid var(--blue-100);color:var(--blue-700);
+       border-radius:999px;padding:.5rem .9rem;font:inherit;font-size:.83rem;cursor:pointer}
+ .chip:hover{background:var(--blue-100)}
  .msg{display:flex;gap:.65rem;max-width:100%}
  .msg.user{justify-content:flex-end}
  .msg-avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;
@@ -238,6 +247,24 @@ function renderLog(){
   const thread=getCurrentThread();
   if(!thread)return;
   chatTitle.textContent=thread.title;
+  if(!thread.messages.length){
+    log.innerHTML=`<div class='welcome'>
+      <div class='welcome-avatar'>🏋️</div>
+      <h2>Comment puis-je vous aider aujourd'hui ?</h2>
+      <div class='suggestions'>
+        <button type='button' class='chip' data-q='Comment prendre du muscle rapidement ?'>Comment prendre du muscle rapidement ?</button>
+        <button type='button' class='chip' data-q='Que manger avant le sport ?'>Que manger avant le sport ?</button>
+        <button type='button' class='chip' data-q='Comment bien recuperer apres un entrainement ?'>Comment bien recuperer apres un entrainement ?</button>
+      </div>
+    </div>`;
+    log.querySelectorAll('.chip').forEach(c=>{
+      c.onclick=()=>{
+        document.getElementById('q').value=c.dataset.q;
+        ask();
+      };
+    });
+    return;
+  }
   const inner=document.createElement('div');
   inner.className='log-inner';
   log.appendChild(inner);
