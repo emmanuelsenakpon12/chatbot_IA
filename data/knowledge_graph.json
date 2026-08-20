@@ -53,7 +53,15 @@
     "developpe_couche",
     "souleve_de_terre",
     "imc",
-    "poids"
+    "poids",
+    "muscle",
+    "ventre",
+    "pompes",
+    "tractions",
+    "abdominaux",
+    "abdos",
+    "gainage",
+    "jambes"
   ],
   "relations": [
     {
@@ -550,6 +558,66 @@
       "src": "poids",
       "dst": "calories",
       "weight": 0.7
+    },
+    {
+      "src": "muscle",
+      "dst": "musculation",
+      "weight": 0.9
+    },
+    {
+      "src": "ventre",
+      "dst": "perte_de_poids",
+      "weight": 0.75
+    },
+    {
+      "src": "pompes",
+      "dst": "musculation",
+      "weight": 0.85
+    },
+    {
+      "src": "pompes",
+      "dst": "force",
+      "weight": 0.7
+    },
+    {
+      "src": "tractions",
+      "dst": "musculation",
+      "weight": 0.85
+    },
+    {
+      "src": "tractions",
+      "dst": "force",
+      "weight": 0.7
+    },
+    {
+      "src": "abdos",
+      "dst": "abdominaux",
+      "weight": 0.95
+    },
+    {
+      "src": "abdominaux",
+      "dst": "musculation",
+      "weight": 0.8
+    },
+    {
+      "src": "abdominaux",
+      "dst": "gainage",
+      "weight": 0.75
+    },
+    {
+      "src": "gainage",
+      "dst": "musculation",
+      "weight": 0.7
+    },
+    {
+      "src": "jambes",
+      "dst": "musculation",
+      "weight": 0.7
+    },
+    {
+      "src": "jambes",
+      "dst": "squat",
+      "weight": 0.75
     }
   ]
 }

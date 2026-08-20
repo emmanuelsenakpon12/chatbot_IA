@@ -68,6 +68,23 @@ def test_robustesse_faute_de_frappe():
     assert reponse != REPONSE_INCONNUE
 
 
+def test_synonymes_courants_du_langage_naturel():
+    """Formulations courantes qui passent par un alias du graphe (muscle,
+    abdos, ventre) ou par le stemming (pompe/pompes, traction/tractions)
+    plutot que par une correspondance exacte de concept."""
+    bot = _bot()
+    for question, mot_attendu in [
+        ("Comment prendre du muscle rapidement ?", "muscul"),
+        ("C'est quoi une pompe ?", "pompe"),
+        ("Qu'est-ce qu'une traction ?", "traction"),
+        ("Comment faire pour avoir des abdos ?", "abdo"),
+        ("Comment perdre du ventre ?", "poids"),
+    ]:
+        reponse = bot.answer(question)
+        assert reponse != REPONSE_INCONNUE, question
+        assert mot_attendu in reponse.lower(), (question, reponse)
+
+
 def test_question_hors_domaine():
     bot = _bot()
     assert bot.answer("quelle est la capitale de la France ?") == REPONSE_INCONNUE
@@ -106,11 +123,19 @@ def test_feedback_de_bout_en_bout(tmp_path):
     # Copie isolee des donnees pour ne pas polluer data/
     data_tmp = tmp_path / "data"
     shutil.copytree(DATA_DIR, data_tmp)
+    # Nombre d'entrees deja presentes (le feedback_log.json reel accumule
+    # l'historique des tests manuels) : on verifie un delta, pas un absolu.
+    log_path = data_tmp / "feedback_log.json"
+    try:
+        with open(log_path, encoding="utf-8") as f:
+            avant_nb = len(json.load(f))
+    except (FileNotFoundError, json.JSONDecodeError):
+        avant_nb = 0
     bot = ChatBot(str(data_tmp))
     question = "Qu'est-ce que le football ?"
     reponse = bot.answer(question)
     avant = bot.kb.graph["football"]["sport"]
     bot.give_feedback(question, reponse, 5)
     assert bot.kb.graph["football"]["sport"] >= avant
-    with open(data_tmp / "feedback_log.json", encoding="utf-8") as f:
-        assert len(json.load(f)) == 1
+    with open(log_path, encoding="utf-8") as f:
+        assert len(json.load(f)) == avant_nb + 1

@@ -686,5 +686,54 @@
       "metabolisme"
     ],
     "intent": "COMPARAISON"
+  },
+  {
+    "question": "Comment faire des pompes correctement ?",
+    "answer": "Pour bien executer une pompe : mains a largeur d'epaules, corps gaine et aligne de la tete aux pieds, on descend jusqu'a effleurer le sol avec la poitrine puis on pousse pour remonter. C'est un exercice polyarticulaire qui muscle les pectoraux, les triceps et les epaules.",
+    "concepts": [
+      "pompes",
+      "musculation",
+      "force"
+    ],
+    "intent": "QUESTION"
+  },
+  {
+    "question": "Comment faire des tractions ?",
+    "answer": "La traction se realise en suspension a une barre, mains en pronation ou supination : on tire le corps vers le haut jusqu'a ce que le menton depasse la barre, puis on redescend en controlant le mouvement. C'est l'un des meilleurs exercices pour le dos et les biceps.",
+    "concepts": [
+      "tractions",
+      "musculation",
+      "force"
+    ],
+    "intent": "QUESTION"
+  },
+  {
+    "question": "Comment se muscler les abdominaux ?",
+    "answer": "Pour muscler les abdominaux : combiner des exercices de gainage (planche) et des mouvements dynamiques (crunchs, releves de jambes), 2 a 3 fois par semaine, en veillant a une alimentation adaptee pour faire ressortir le dessin musculaire.",
+    "concepts": [
+      "abdominaux",
+      "gainage",
+      "musculation"
+    ],
+    "intent": "QUESTION"
+  },
+  {
+    "question": "Qu'est-ce que le gainage ?",
+    "answer": "Le gainage est un exercice isometrique (sans mouvement) qui consiste a maintenir une position, comme la planche, pour renforcer les abdominaux profonds et stabiliser le tronc.",
+    "concepts": [
+      "gainage",
+      "abdominaux"
+    ],
+    "intent": "DEFINITION"
+  },
+  {
+    "question": "Quels sont les meilleurs exercices pour les jambes ?",
+    "answer": "Les meilleurs exercices pour les jambes sont le squat, la fente, la presse et le souleve de terre jambes tendues : ils sollicitent les quadriceps, les ischio-jambiers et les fessiers.",
+    "concepts": [
+      "jambes",
+      "squat",
+      "musculation"
+    ],
+    "intent": "QUESTION"
   }
 ]
