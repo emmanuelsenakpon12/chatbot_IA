@@ -122,6 +122,18 @@ def create_app(bot):
  .log::-webkit-scrollbar-thumb,.thread-list::-webkit-scrollbar-thumb{
    background:var(--blue-200);border-radius:8px}
  .log::-webkit-scrollbar-track,.thread-list::-webkit-scrollbar-track{background:transparent}
+ .sidebar-toggle{display:none;position:fixed;top:.75rem;left:.75rem;z-index:20;
+                 background:var(--surface);border:1px solid var(--border);
+                 border-radius:var(--radius-sm);width:36px;height:36px;cursor:pointer;
+                 font-size:1rem;box-shadow:var(--shadow-sm);align-items:center;
+                 justify-content:center}
+ @media (max-width:760px){
+   .sidebar{position:fixed;inset:0 auto 0 0;z-index:15;transform:translateX(-100%);
+            transition:transform .2s ease;box-shadow:var(--shadow-md)}
+   .sidebar.open{transform:translateX(0)}
+   .sidebar-toggle{display:flex}
+   .chat-header{padding-left:3.2rem}
+ }
  .msg{display:flex;gap:.65rem;max-width:100%}
  .msg.user{justify-content:flex-end}
  .msg-avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;
@@ -165,6 +177,7 @@ def create_app(bot):
  <div class='thread-section-label'>Discussions</div>
  <div id='threads' class='thread-list'></div>
 </aside>
+<button id='sidebarToggle' class='sidebar-toggle' type='button' aria-label='Menu'>&#9776;</button>
 <main class='chat-panel'>
 <header class='chat-header'><h1 id='chatTitle'>Nouvelle discussion</h1></header>
 <div id='log' class='log'></div>
@@ -181,6 +194,7 @@ def create_app(bot):
 const log=document.getElementById('log');
 const chatTitle=document.getElementById('chatTitle');
 const threadList=document.getElementById('threads');
+const sidebar=document.getElementById('sidebar');
 const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
   '"':'&quot;',"'":'&#39;'}[c]));
 const genId=()=>'t'+Date.now()+Math.random().toString(36).slice(2,7);
@@ -221,6 +235,7 @@ function switchThread(id){
   saveThreads();
   renderSidebar();
   renderLog();
+  sidebar.classList.remove('open');
 }
 
 function deleteThread(id){
@@ -366,6 +381,11 @@ document.getElementById('newThread').addEventListener('click',()=>{
   saveThreads();
   renderSidebar();
   renderLog();
+  sidebar.classList.remove('open');
+});
+
+document.getElementById('sidebarToggle').addEventListener('click',()=>{
+  sidebar.classList.toggle('open');
 });
 
 // IMPORTANT : ask() est async donc retourne une Promise (toujours truthy).
