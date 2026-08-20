@@ -89,5 +89,40 @@
     "score": 1,
     "timestamp": 1787260985.0029793,
     "applique": true
+  },
+  {
+    "question": "Comment bien recuperer apres un entrainement ?",
+    "answer": "La recuperation regroupe le repos, le sommeil, l'hydratation et la nutrition qui permettent au corps de se regenerer apres l'entrainement.",
+    "score": 3,
+    "timestamp": 1787261321.8498914,
+    "applique": true
+  },
+  {
+    "question": "mmmm",
+    "answer": "La musculation est un entrainement visant a developper la force et la masse musculaire grace a des exercices avec charges ou au poids du corps.",
+    "score": 2,
+    "timestamp": 1787261650.8341467,
+    "applique": true
+  },
+  {
+    "question": "bb",
+    "answer": "La musculation est un entrainement visant a developper la force et la masse musculaire grace a des exercices avec charges ou au poids du corps.",
+    "score": 2,
+    "timestamp": 1787261653.6401253,
+    "applique": true
+  },
+  {
+    "question": "mmmm",
+    "answer": "Je n'ai pas trouve de reponse a cette question. Essayez de reformuler ou posez une question sur le sport, la musculation ou la nutrition.",
+    "score": 2,
+    "timestamp": 1787261656.1328979,
+    "applique": true
+  },
+  {
+    "question": "ok",
+    "answer": "Je n'ai pas trouve de reponse a cette question. Essayez de reformuler ou posez une question sur le sport, la musculation ou la nutrition.",
+    "score": 5,
+    "timestamp": 1787261663.3916318,
+    "applique": true
   }
 ]
