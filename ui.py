@@ -175,6 +175,40 @@ def create_app(bot):
  .send-btn:active{transform:scale(.94)}
  .composer-hint{max-width:720px;margin:.5rem auto 0;text-align:center;font-size:.72rem;
                 color:var(--text-muted)}
+ .settings-btn{display:flex;align-items:center;justify-content:center;gap:.4rem;
+               background:transparent;color:var(--text-muted);border:1px solid var(--border);
+               border-radius:var(--radius-md);padding:.55rem .8rem;font:inherit;font-size:.85rem;
+               cursor:pointer;margin-top:.5rem;transition:background .12s ease,color .12s ease}
+ .settings-btn:hover{background:var(--blue-50);color:var(--blue-700)}
+ .settings-panel{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--surface)}
+ .settings-panel .chat-header{display:flex;align-items:center;justify-content:space-between}
+ .settings-close{background:none;border:none;font-size:1.3rem;line-height:1;cursor:pointer;
+                 color:var(--text-muted);padding:.2rem .5rem;border-radius:6px}
+ .settings-close:hover{background:var(--blue-50);color:var(--blue-700)}
+ .settings-body{flex:1;overflow-y:auto;padding:1.25rem 1.5rem 2rem;
+                display:flex;flex-direction:column;gap:1.75rem;max-width:720px;margin:0 auto;width:100%}
+ .stat-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.75rem}
+ .stat-tile{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:var(--radius-md);
+            padding:.9rem 1rem;display:flex;flex-direction:column;gap:.2rem}
+ .stat-tile .value{font-size:1.5rem;font-weight:700;color:var(--blue-700)}
+ .stat-tile .label{font-size:.75rem;color:var(--text-muted)}
+ .chart-section h2{font-size:.95rem;font-weight:600;margin:0 0 .2rem}
+ .chart-desc{font-size:.78rem;color:var(--text-muted);margin:0 0 .6rem}
+ .chart-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);
+            padding:.75rem;position:relative}
+ .chart-empty{color:var(--text-muted);font-size:.85rem;text-align:center;padding:2rem 0;margin:0}
+ .chart-svg{display:block;width:100%;height:auto;overflow:visible}
+ .chart-line{fill:none;stroke:var(--blue-500);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+ .chart-point{fill:var(--surface);stroke:var(--blue-500);stroke-width:2}
+ .chart-point-hover{fill:var(--blue-500);stroke:var(--surface);stroke-width:2}
+ .chart-axis{stroke:var(--border);stroke-width:1}
+ .chart-guide{stroke:var(--blue-200);stroke-width:1;stroke-dasharray:3 3}
+ .chart-ylabel{font-size:8px;fill:var(--text-muted)}
+ .chart-tooltip{position:absolute;pointer-events:none;background:var(--text);color:#fff;
+                font-size:.72rem;line-height:1.4;padding:.35rem .55rem;border-radius:6px;
+                white-space:nowrap;transform:translate(-50%,-120%);opacity:0;
+                transition:opacity .08s ease;z-index:5}
+ .chart-tooltip.visible{opacity:1}
 </style></head><body>
 <div class='app'>
 <aside class='sidebar' id='sidebar'>
@@ -182,9 +216,10 @@ def create_app(bot):
  <button id='newThread' class='new-chat-btn' type='button'>+ Nouvelle discussion</button>
  <div class='thread-section-label'>Discussions</div>
  <div id='threads' class='thread-list'></div>
+ <button id='openSettings' class='settings-btn' type='button'>&#9881; Parametres</button>
 </aside>
 <button id='sidebarToggle' class='sidebar-toggle' type='button' aria-label='Menu'>&#9776;</button>
-<main class='chat-panel'>
+<main class='chat-panel' id='chatPanel'>
 <header class='chat-header'><h1 id='chatTitle'>Nouvelle discussion</h1></header>
 <div id='log' class='log'></div>
 <div class='composer'>
@@ -195,6 +230,25 @@ def create_app(bot):
 <p class='composer-hint'>Sport, musculation &amp; nutrition</p>
 </div>
 </main>
+<div class='settings-panel' id='settingsPanel' hidden>
+<header class='chat-header'>
+ <h1>Parametres</h1>
+ <button id='closeSettings' class='settings-close' type='button' aria-label='Fermer'>&times;</button>
+</header>
+<div class='settings-body' id='settingsBody'>
+ <div class='stat-tiles' id='statTiles'></div>
+ <section class='chart-section'>
+  <h2>Courbe de feedback</h2>
+  <p class='chart-desc'>Note donnee a chaque reponse (1 a 5), dans l'ordre chronologique.</p>
+  <div class='chart-box' id='feedbackChart'></div>
+ </section>
+ <section class='chart-section'>
+  <h2>Courbe d'apprentissage</h2>
+  <p class='chart-desc'>Renforcement net cumule du graphe de connaissances (+1 par bonne note, -1 par mauvaise).</p>
+  <div class='chart-box' id='learningChart'></div>
+ </section>
+</div>
+</div>
 </div>
 <script>
 const log=document.getElementById('log');
@@ -401,6 +455,188 @@ document.getElementById('sidebarToggle').addEventListener('click',()=>{
   sidebar.classList.toggle('open');
 });
 
+// ------------------------------------------------------------------
+// Parametres : statistiques + courbes de feedback / apprentissage
+// ------------------------------------------------------------------
+function formatDate(t){
+  const d=new Date(t*1000);
+  return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'})+
+    ' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+}
+
+function drawLineChart(container, points, opts){
+  opts=opts||{};
+  container.innerHTML='';
+  if(!points.length){
+    container.innerHTML=`<p class='chart-empty'>${opts.emptyText||'Pas encore de donnees.'}</p>`;
+    return;
+  }
+  const W=600,H=180,ML=28,MR=12,MT=12,MB=10;
+  const innerW=W-ML-MR, innerH=H-MT-MB;
+  let yMin,yMax;
+  if(opts.yDomain){[yMin,yMax]=opts.yDomain;}
+  else{
+    const vals=points.map(p=>p.value);
+    yMin=Math.min(...vals); yMax=Math.max(...vals);
+    if(yMin===yMax){yMin-=1;yMax+=1;}
+    const pad=(yMax-yMin)*0.15;
+    yMin-=pad; yMax+=pad;
+  }
+  const n=points.length;
+  const xAt=i=> n===1 ? ML+innerW/2 : ML+(innerW*i/(n-1));
+  const yAt=v=> MT+innerH-((v-yMin)/(yMax-yMin))*innerH;
+
+  const NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg');
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.setAttribute('class','chart-svg');
+  svg.setAttribute('role','img');
+  if(opts.ariaLabel) svg.setAttribute('aria-label',opts.ariaLabel);
+
+  if(opts.zeroLine && yMin<0 && yMax>0){
+    const zy=yAt(0);
+    const zl=document.createElementNS(NS,'line');
+    zl.setAttribute('x1',ML);zl.setAttribute('x2',ML+innerW);
+    zl.setAttribute('y1',zy);zl.setAttribute('y2',zy);
+    zl.setAttribute('class','chart-axis');
+    svg.appendChild(zl);
+  }
+  const base=document.createElementNS(NS,'line');
+  base.setAttribute('x1',ML);base.setAttribute('x2',ML+innerW);
+  base.setAttribute('y1',MT+innerH);base.setAttribute('y2',MT+innerH);
+  base.setAttribute('class','chart-axis');
+  svg.appendChild(base);
+
+  [yMax,yMin].forEach((v,i)=>{
+    const t=document.createElementNS(NS,'text');
+    t.setAttribute('x',2); t.setAttribute('y', i===0? MT+7 : MT+innerH+1);
+    t.setAttribute('class','chart-ylabel');
+    t.textContent = opts.yFormat ? opts.yFormat(v) : Math.round(v);
+    svg.appendChild(t);
+  });
+
+  const d=points.map((p,i)=>(i===0?'M':'L')+xAt(i).toFixed(1)+','+yAt(p.value).toFixed(1)).join(' ');
+  const path=document.createElementNS(NS,'path');
+  path.setAttribute('d',d);
+  path.setAttribute('class','chart-line');
+  svg.appendChild(path);
+
+  points.forEach((p,i)=>{
+    const c=document.createElementNS(NS,'circle');
+    c.setAttribute('cx',xAt(i)); c.setAttribute('cy',yAt(p.value));
+    c.setAttribute('r',3.5);
+    c.setAttribute('class','chart-point');
+    svg.appendChild(c);
+  });
+
+  const guide=document.createElementNS(NS,'line');
+  guide.setAttribute('y1',MT); guide.setAttribute('y2',MT+innerH);
+  guide.setAttribute('class','chart-guide');
+  guide.style.opacity='0';
+  svg.appendChild(guide);
+  const hoverPt=document.createElementNS(NS,'circle');
+  hoverPt.setAttribute('r',5);
+  hoverPt.setAttribute('class','chart-point-hover');
+  hoverPt.style.opacity='0';
+  svg.appendChild(hoverPt);
+
+  container.appendChild(svg);
+  const tooltip=document.createElement('div');
+  tooltip.className='chart-tooltip';
+  container.appendChild(tooltip);
+
+  function nearestIndex(clientX){
+    const rect=svg.getBoundingClientRect();
+    const relX=(clientX-rect.left)/rect.width*W;
+    let best=0,bestDist=Infinity;
+    for(let i=0;i<n;i++){
+      const dist=Math.abs(xAt(i)-relX);
+      if(dist<bestDist){bestDist=dist;best=i;}
+    }
+    return best;
+  }
+  function showTooltip(i){
+    const p=points[i];
+    guide.setAttribute('x1',xAt(i)); guide.setAttribute('x2',xAt(i));
+    guide.style.opacity='1';
+    hoverPt.setAttribute('cx',xAt(i)); hoverPt.setAttribute('cy',yAt(p.value));
+    hoverPt.style.opacity='1';
+    const rect=container.getBoundingClientRect();
+    tooltip.style.left=(xAt(i)/W*rect.width)+'px';
+    tooltip.style.top=(yAt(p.value)/H*rect.height)+'px';
+    tooltip.innerHTML = opts.tooltip ? opts.tooltip(p,i) : String(p.value);
+    tooltip.classList.add('visible');
+  }
+  function hideTooltip(){
+    guide.style.opacity='0';
+    hoverPt.style.opacity='0';
+    tooltip.classList.remove('visible');
+  }
+  svg.addEventListener('mousemove',ev=>showTooltip(nearestIndex(ev.clientX)));
+  svg.addEventListener('mouseleave',hideTooltip);
+  svg.addEventListener('touchstart',ev=>{
+    if(ev.touches[0]) showTooltip(nearestIndex(ev.touches[0].clientX));
+  },{passive:true});
+}
+
+function renderStatTiles(s){
+  const tiles=[
+    {value:s.concepts,label:'Concepts'},
+    {value:s.relations,label:'Relations'},
+    {value:s.qa_pairs,label:'Paires Q/R'},
+    {value:s.feedback_total,label:'Feedbacks recus'},
+    {value:s.feedback_positifs,label:'Notes positives'},
+    {value:s.feedback_negatifs,label:'Notes negatives'},
+  ];
+  document.getElementById('statTiles').innerHTML = tiles.map(t=>
+    `<div class='stat-tile'><div class='value'>${t.value}</div><div class='label'>${t.label}</div></div>`
+  ).join('');
+}
+
+async function loadStats(){
+  const tilesEl=document.getElementById('statTiles');
+  const fbEl=document.getElementById('feedbackChart');
+  const learnEl=document.getElementById('learningChart');
+  tilesEl.innerHTML='<p class="chart-empty">Chargement...</p>';
+  fbEl.innerHTML=''; learnEl.innerHTML='';
+  try{
+    const r=await fetch('/stats');
+    const s=await r.json();
+    renderStatTiles(s);
+    const fbPoints=s.feedback_serie.map((p,i)=>({value:p.score,t:p.t,i:i+1}));
+    drawLineChart(fbEl, fbPoints, {
+      yDomain:[1,5],
+      yFormat:v=>v.toFixed(0),
+      ariaLabel:'Courbe de feedback',
+      tooltip:p=>`Question #${p.i} – note ${p.value}/5<br>${formatDate(p.t)}`,
+      emptyText:'Pas encore de feedback enregistre.',
+    });
+    const learnPoints=s.apprentissage_serie.map((p,i)=>({value:p.cumule,t:p.t,i:i+1}));
+    drawLineChart(learnEl, learnPoints, {
+      zeroLine:true,
+      yFormat:v=>(v>0?'+':'')+v.toFixed(0),
+      ariaLabel:"Courbe d'apprentissage",
+      tooltip:p=>`Apres ${p.i} feedback(s) – renforcement net ${p.value>0?'+':''}${p.value}<br>${formatDate(p.t)}`,
+      emptyText:"Pas encore d'apprentissage enregistre.",
+    });
+  }catch(e){
+    tilesEl.innerHTML='<p class="chart-empty">Impossible de charger les statistiques.</p>';
+  }
+}
+
+function openSettings(){
+  document.getElementById('chatPanel').hidden=true;
+  document.getElementById('settingsPanel').hidden=false;
+  sidebar.classList.remove('open');
+  loadStats();
+}
+function closeSettings(){
+  document.getElementById('settingsPanel').hidden=true;
+  document.getElementById('chatPanel').hidden=false;
+}
+document.getElementById('openSettings').addEventListener('click', openSettings);
+document.getElementById('closeSettings').addEventListener('click', closeSettings);
+
 // IMPORTANT : ask() est async donc retourne une Promise (toujours truthy).
 // Un 'return ask()' ne bloquerait PAS l'envoi natif du formulaire et la page
 // se rechargerait. On annule donc explicitement l'evenement.
@@ -438,6 +674,39 @@ renderLog();
         except (KeyError, ValueError, TypeError):
             return jsonify({"ok": False}), 400
         return jsonify({"ok": True})
+
+    @app.route("/stats")
+    def stats():
+        """Statistiques pour le volet Parametres : taille de la base de
+        connaissances, courbe de feedback (note par question, dans l'ordre
+        chronologique) et courbe d'apprentissage (renforcement net cumule
+        du graphe : +1 par bonne note, -1 par mauvaise)."""
+        log = sorted(bot.learner.feedback_log,
+                     key=lambda fb: fb.get("timestamp", 0))
+        feedback_serie = []
+        apprentissage_serie = []
+        repartition = {str(n): 0 for n in range(1, 6)}
+        cumul = 0
+        for fb in log:
+            score = fb.get("score", 3)
+            if str(score) in repartition:
+                repartition[str(score)] += 1
+            feedback_serie.append({"t": fb.get("timestamp", 0), "score": score})
+            cumul += 1 if score >= 4 else (-1 if score <= 2 else 0)
+            apprentissage_serie.append({"t": fb.get("timestamp", 0), "cumule": cumul})
+
+        nb_relations = sum(len(voisins) for voisins in bot.kb.graph.values())
+        return jsonify({
+            "concepts": len(bot.kb.graph),
+            "relations": nb_relations,
+            "qa_pairs": len(bot.kb.qa_pairs),
+            "feedback_total": len(log),
+            "feedback_positifs": sum(1 for fb in log if fb.get("score", 3) >= 4),
+            "feedback_negatifs": sum(1 for fb in log if fb.get("score", 3) <= 2),
+            "repartition_scores": repartition,
+            "feedback_serie": feedback_serie,
+            "apprentissage_serie": apprentissage_serie,
+        })
 
     return app
 

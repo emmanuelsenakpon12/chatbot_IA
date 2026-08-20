@@ -183,3 +183,57 @@ def test_feedback_sans_corps_json():
     client = create_app(_bot()).test_client()
     r = client.post("/feedback")
     assert r.status_code == 400
+
+
+# ----------------------------------------------------------------------
+# Flask : /stats (volet Parametres : compteurs + courbes)
+# ----------------------------------------------------------------------
+def test_stats_structure():
+    client = create_app(_bot()).test_client()
+    r = client.get("/stats")
+    assert r.status_code == 200
+    data = r.get_json()
+    for cle in ("concepts", "relations", "qa_pairs", "feedback_total",
+                "feedback_positifs", "feedback_negatifs",
+                "repartition_scores", "feedback_serie", "apprentissage_serie"):
+        assert cle in data
+    assert data["concepts"] > 0
+    assert data["qa_pairs"] > 0
+    assert len(data["feedback_serie"]) == data["feedback_total"]
+    assert len(data["apprentissage_serie"]) == data["feedback_total"]
+    assert sum(data["repartition_scores"].values()) == data["feedback_total"]
+
+
+def test_stats_feedback_vide(tmp_path):
+    """Un bot sans aucun feedback renvoie des series vides, pas une erreur
+    (le volet Parametres doit pouvoir afficher un etat vide propre)."""
+    data_tmp = tmp_path / "data"
+    shutil.copytree(DATA_DIR, data_tmp)
+    (data_tmp / "feedback_log.json").write_text("[]", encoding="utf-8")
+    bot = ChatBot(str(data_tmp))
+    client = create_app(bot).test_client()
+    data = client.get("/stats").get_json()
+    assert data["feedback_total"] == 0
+    assert data["feedback_serie"] == []
+    assert data["apprentissage_serie"] == []
+    assert sum(data["repartition_scores"].values()) == 0
+
+
+def test_stats_courbe_apprentissage_cumule_correctement(tmp_path):
+    """La courbe d'apprentissage doit etre le cumul exact des +1/-1 derives
+    des notes de la courbe de feedback (+1 si score>=4, -1 si score<=2,
+    0 sinon), dans le meme ordre chronologique."""
+    bot = _bot_isole(tmp_path)
+    bot.give_feedback("q1", "r1", 5)   # +1
+    bot.give_feedback("q2", "r2", 1)   # -1
+    bot.give_feedback("q3", "r3", 3)   # 0 (neutre)
+    bot.give_feedback("q4", "r4", 4)   # +1
+    client = create_app(bot).test_client()
+    data = client.get("/stats").get_json()
+    scores = [p["score"] for p in data["feedback_serie"]]
+    cumules = [p["cumule"] for p in data["apprentissage_serie"]]
+    assert len(scores) == len(cumules)
+    attendu = 0
+    for score, cumule in zip(scores, cumules):
+        attendu += 1 if score >= 4 else (-1 if score <= 2 else 0)
+        assert cumule == attendu
