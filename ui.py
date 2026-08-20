@@ -76,6 +76,12 @@ def create_app(bot):
    --shadow-sm:0 1px 2px rgba(20,30,60,.06);--shadow-md:0 4px 16px rgba(20,30,60,.08);
  }
  *{box-sizing:border-box}
+ /* Le navigateur ne priorise PAS [hidden] sur un display pose par une regle
+    d'auteur de meme specificite (.chat-panel{display:flex} par ex.) : sans
+    ce !important, un element avec l'attribut hidden reste quand meme affiche
+    des qu'une classe lui donne un display. Touche .chat-panel/.settings-panel
+    ici (bascule du volet Parametres). */
+ [hidden]{display:none !important}
  html,body{height:100%;margin:0}
  body{font-family:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
       background:var(--bg);color:var(--text)}

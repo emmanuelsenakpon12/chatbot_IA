@@ -124,5 +124,40 @@
     "score": 5,
     "timestamp": 1787261663.3916318,
     "applique": true
+  },
+  {
+    "question": "caca",
+    "answer": "La musculation est un entrainement visant a developper la force et la masse musculaire grace a des exercices avec charges ou au poids du corps.",
+    "score": 2,
+    "timestamp": 1787265072.7525125,
+    "applique": true
+  },
+  {
+    "question": "Comment prendre du muscle rapidement ?",
+    "answer": "Pour gagner en force : faire de la musculation avec des charges progressives, privilegier les exercices polyarticulaires et respecter la recuperation entre les seances.",
+    "score": 3,
+    "timestamp": 1787265084.175951,
+    "applique": true
+  },
+  {
+    "question": "ff",
+    "answer": "Pour gagner en force : faire de la musculation avec des charges progressives, privilegier les exercices polyarticulaires et respecter la recuperation entre les seances.",
+    "score": 1,
+    "timestamp": 1787265091.2377563,
+    "applique": true
+  },
+  {
+    "question": "hh",
+    "answer": "Les proteines servent a reparer et construire les fibres musculaires apres l'effort. Elles sont essentielles pour progresser en musculation.",
+    "score": 2,
+    "timestamp": 1787265099.358936,
+    "applique": true
+  },
+  {
+    "question": "gg",
+    "answer": "Les exercices polyarticulaires de base sont les plus efficaces : squat, souleve de terre, developpe couche, tractions et rowing. Ils recrutent plusieurs groupes musculaires a la fois.",
+    "score": 1,
+    "timestamp": 1787265107.6761196,
+    "applique": true
   }
 ]

@@ -95,6 +95,22 @@ def test_index_sert_la_page():
     assert b"ChatBot IA" in r.data
 
 
+def test_index_le_volet_parametres_peut_reellement_se_cacher():
+    """Regression : .chat-panel et .settings-panel ont toutes deux un
+    'display' fixe pose par une regle de classe. Dans un vrai navigateur,
+    une regle d'auteur de meme specificite l'emporte TOUJOURS sur le
+    style par defaut de [hidden], quel que soit l'ordre des regles :
+    sans un [hidden]{display:none !important} explicite, basculer
+    l'attribut hidden en JS (chatPanel.hidden=true / settingsPanel.hidden
+    =false) ne cache visuellement rien, et les deux volets s'affichent
+    cote a cote en permanence (bug confirme avec un navigateur reel,
+    Playwright, avant ce correctif -- pytest seul ne peut pas executer
+    le CSS en cascade, d'ou cette verification textuelle ciblee)."""
+    client = create_app(_bot()).test_client()
+    html = client.get("/").data.decode("utf-8")
+    assert "[hidden]" in html and "display:none !important" in html
+
+
 # ----------------------------------------------------------------------
 # Flask : /ask
 # ----------------------------------------------------------------------
