@@ -54,10 +54,25 @@ def create_app(bot):
     app = Flask(__name__)
 
     PAGE = """<!doctype html><html lang='fr'><head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <title>ChatBot IA - Sport</title>
 <link rel='icon' href='data:,'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap' rel='stylesheet'>
 <style>
- body{font-family:sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;
+ :root{
+   --blue-50:#eef4ff;--blue-100:#dbe7fe;--blue-200:#bfd7fe;
+   --blue-500:#3b6fd6;--blue-600:#2f5fc4;--blue-700:#254aa0;
+   --bg:#f6f8fc;--bg-sidebar:#eef2fa;--surface:#ffffff;
+   --border:#e1e7f2;--text:#1c2230;--text-muted:#68708a;
+   --radius-lg:16px;--radius-md:12px;--radius-sm:8px;
+   --shadow-sm:0 1px 2px rgba(20,30,60,.06);--shadow-md:0 4px 16px rgba(20,30,60,.08);
+ }
+ *{box-sizing:border-box}
+ body{font-family:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+      background:var(--bg);color:var(--text);
+      max-width:900px;margin:2rem auto;padding:0 1rem;
       display:flex;gap:1rem}
  .sidebar{width:220px;flex-shrink:0;display:flex;flex-direction:column}
  .sidebar h3{margin:.2rem 0 .6rem 0;font-size:1rem}
