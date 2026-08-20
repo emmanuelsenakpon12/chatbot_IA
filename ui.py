@@ -77,18 +77,29 @@ def create_app(bot):
  .sidebar{width:220px;flex-shrink:0;display:flex;flex-direction:column;
           background:var(--bg-sidebar);border-right:1px solid var(--border);
           padding:1rem .75rem;gap:.5rem;overflow-y:auto}
- .sidebar h3{margin:.2rem 0 .6rem 0;font-size:1rem}
- #newThread{padding:.5rem;margin-bottom:.6rem;cursor:pointer}
- #threads{border:1px solid #ccc;border-radius:8px;overflow-y:auto;flex:1}
- .thread-item{display:flex;align-items:center;justify-content:space-between;
-              padding:.5rem .6rem;cursor:pointer;border-bottom:1px solid #eee;
-              font-size:.9rem}
- .thread-item:hover{background:#f0f0f0}
- .thread-item.active{background:#e3ecfb;font-weight:bold}
+ .brand{display:flex;align-items:center;gap:.5rem;font-weight:600;font-size:1rem;
+        padding:.25rem .25rem .75rem}
+ .brand-dot{width:10px;height:10px;border-radius:50%;background:var(--blue-500);
+            box-shadow:0 0 0 4px var(--blue-100)}
+ .new-chat-btn{display:flex;align-items:center;justify-content:center;gap:.4rem;
+               background:var(--blue-500);color:#fff;border:none;border-radius:var(--radius-md);
+               padding:.65rem .8rem;font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;
+               box-shadow:var(--shadow-sm);margin-bottom:.6rem;width:100%}
+ .new-chat-btn:hover{background:var(--blue-600)}
+ .new-chat-btn:active{transform:scale(.98)}
+ .thread-section-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;
+                        color:var(--text-muted);padding:.4rem .4rem .3rem}
+ .thread-list{border:none;overflow-y:auto;flex:1;display:flex;
+              flex-direction:column;gap:.1rem}
+ .thread-item{display:flex;align-items:center;justify-content:space-between;gap:.4rem;
+              padding:.55rem .6rem;cursor:pointer;border-radius:var(--radius-sm);
+              font-size:.87rem;color:var(--text)}
+ .thread-item:hover{background:var(--blue-50)}
+ .thread-item.active{background:var(--blue-100);color:var(--blue-700);font-weight:600}
  .thread-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
- .thread-del{background:none;border:none;color:#999;cursor:pointer;
-             padding:0 .2rem;font-size:1rem}
- .thread-del:hover{color:#c00}
+ .thread-del{background:none;border:none;color:var(--text-muted);cursor:pointer;
+             padding:.1rem .3rem;font-size:.9rem;border-radius:6px}
+ .thread-del:hover{color:#c0362c;background:#fde8e6}
  .chat-panel{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--surface)}
  .chat-header{padding:.9rem 1.5rem;border-bottom:1px solid var(--border)}
  .chat-header h1{font-size:.95rem;font-weight:600;margin:0}
@@ -102,9 +113,10 @@ def create_app(bot):
 </style></head><body>
 <div class='app'>
 <aside class='sidebar' id='sidebar'>
- <h3>Fils de conversation</h3>
- <button id='newThread' type='button'>+ Nouvelle discussion</button>
- <div id='threads'></div>
+ <div class='brand'><span class='brand-dot'></span>ChatBot IA</div>
+ <button id='newThread' class='new-chat-btn' type='button'>+ Nouvelle discussion</button>
+ <div class='thread-section-label'>Discussions</div>
+ <div id='threads' class='thread-list'></div>
 </aside>
 <main class='chat-panel'>
 <header class='chat-header'><h1 id='chatTitle'>Nouvelle discussion</h1></header>
