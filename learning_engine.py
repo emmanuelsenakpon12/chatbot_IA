@@ -27,6 +27,8 @@ import re
 import time
 from collections import defaultdict
 
+from nlp_engine import SimpleFrenchStemmer
+
 
 class LearningEngine:
     """Moteur d'apprentissage : TF-IDF, Naive Bayes, feedback loop."""
@@ -46,6 +48,10 @@ class LearningEngine:
         self.feedback_log: list[dict] = []
         # Cumul de feedback par cle de reponse : {answer: score_cumule}
         self._feedback_boost: dict[str, float] = defaultdict(float)
+        # Stemmer partage avec NLPEngine : necessaire pour que les tokens des
+        # candidats (rank_answers) retombent sur le meme vocabulaire stemme
+        # que celui construit par build_tfidf (documents deja pretraites).
+        self._stemmer = SimpleFrenchStemmer()
         # Naive Bayes
         self._nb_priors: dict[str, float] = {}
         self._nb_likelihood: dict[str, dict[str, float]] = {}
@@ -118,7 +124,12 @@ class LearningEngine:
         for cand in candidates:
             texte = cand["answer"] if isinstance(cand, dict) else str(cand)
             base = cand.get("question", "") if isinstance(cand, dict) else ""
-            tokens = self._tokens_simples(base + " " + texte)
+            mots = self._tokens_simples(base + " " + texte)
+            # `query_tokens` arrive deja stemme (nlp.preprocess) ; il faut
+            # stemmer les tokens candidats de la meme facon, sinon ils ne
+            # retombent jamais sur le vocabulaire de l'IDF (voir build_tfidf)
+            # et la similarite cosinus est nulle pour tout le monde.
+            tokens = [self._stemmer.stem(t) for t in mots]
             s = self.cosine_similarity(vq, self.vectorize(tokens))
             s += self.BONUS_RANKING * self._feedback_boost.get(texte, 0.0)
             scores.append((s, cand))

@@ -71,6 +71,27 @@ def test_rank_answers_pertinence():
     assert ranked[0] == "le football est un sport collectif"
 
 
+def test_rank_answers_stemme_les_candidats():
+    """Regression : les tokens des candidats doivent etre stemmes comme
+    ceux du corpus (build_tfidf), sinon ils ne retombent jamais sur le
+    vocabulaire de l'IDF et la similarite cosinus est nulle pour tout le
+    monde (le classement degenere alors en ordre d'arrivee des candidats)."""
+    le = LearningEngine()
+    nlp = NLPEngine()
+    # "ameliorer"/"amelioration" ne sont pas invariants par le stemmer
+    # maison (contrairement a "football"/"sport" utilises ci-dessus) :
+    # c'est le cas qui revelait le bug.
+    docs = [nlp.preprocess("comment ameliorer son endurance grace au cardio"),
+            nlp.preprocess("le cyclisme est un sport pratique a velo")]
+    le.build_tfidf(docs)
+    query = nlp.preprocess("comment ameliorer mon endurance")
+    ranked = le.rank_answers(query, [
+        "le cyclisme est un sport pratique a velo",
+        "comment ameliorer son endurance grace au cardio",
+    ])
+    assert ranked[0] == "comment ameliorer son endurance grace au cardio"
+
+
 # ----------------------------------------------------------------------
 # Naive Bayes
 # ----------------------------------------------------------------------
