@@ -54,5 +54,12 @@
     "score": 1,
     "timestamp": 1787253715.532232,
     "applique": true
+  },
+  {
+    "question": "tu es specialisé dans quoi ?",
+    "answer": "Je suis un assistant specialise dans le sport, la musculation et la nutrition. Tu peux me poser des questions sur les differents sports, les exercices de musculation, l'entrainement, la recuperation, la perte de poids ou la prise de masse.",
+    "score": 3,
+    "timestamp": 1787255472.393679,
+    "applique": true
   }
 ]
