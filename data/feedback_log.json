@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "question": "cc",
+    "answer": "Je n'ai pas trouve de reponse a cette question. Essayez de reformuler ou posez une question sur le sport, la musculation ou la nutrition.",
+    "score": 2,
+    "timestamp": 1785189527.4278111,
+    "applique": true
+  },
+  {
+    "question": "Parlons sport",
+    "answer": "Le sport ameliore la sante cardiovasculaire, renforce les muscles et les os, reduit le stress, ameliore le sommeil et diminue le risque de nombreuses maladies.",
+    "score": 4,
+    "timestamp": 1785189550.432498,
+    "applique": true
+  },
+  {
+    "question": "donnes la listes des differents types de sport",
+    "answer": "Le sport ameliore la sante cardiovasculaire, renforce les muscles et les os, reduit le stress, ameliore le sommeil et diminue le risque de nombreuses maladies.",
+    "score": 4,
+    "timestamp": 1785189572.667094,
+    "applique": true
+  },
+  {
+    "question": "les differents",
+    "answer": "Je n'ai pas trouve de reponse a cette question. Essayez de reformuler ou posez une question sur le sport, la musculation ou la nutrition.",
+    "score": 1,
+    "timestamp": 1785189590.0823066,
+    "applique": true
+  },
+  {
+    "question": "ca va",
+    "answer": "Bonjour ! Je suis votre assistant sport, musculation et nutrition. Comment puis-je vous aider ?",
+    "score": 2,
+    "timestamp": 1787247242.5389924,
+    "applique": true
+  }
+]
