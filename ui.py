@@ -84,7 +84,8 @@ def create_app(bot):
  .new-chat-btn{display:flex;align-items:center;justify-content:center;gap:.4rem;
                background:var(--blue-500);color:#fff;border:none;border-radius:var(--radius-md);
                padding:.65rem .8rem;font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;
-               box-shadow:var(--shadow-sm);margin-bottom:.6rem;width:100%}
+               box-shadow:var(--shadow-sm);margin-bottom:.6rem;width:100%;
+               transition:background .15s ease, transform .1s ease}
  .new-chat-btn:hover{background:var(--blue-600)}
  .new-chat-btn:active{transform:scale(.98)}
  .thread-section-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;
@@ -93,12 +94,14 @@ def create_app(bot):
               flex-direction:column;gap:.1rem}
  .thread-item{display:flex;align-items:center;justify-content:space-between;gap:.4rem;
               padding:.55rem .6rem;cursor:pointer;border-radius:var(--radius-sm);
-              font-size:.87rem;color:var(--text)}
+              font-size:.87rem;color:var(--text);transition:background .12s ease}
  .thread-item:hover{background:var(--blue-50)}
  .thread-item.active{background:var(--blue-100);color:var(--blue-700);font-weight:600}
  .thread-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
  .thread-del{background:none;border:none;color:var(--text-muted);cursor:pointer;
-             padding:.1rem .3rem;font-size:.9rem;border-radius:6px}
+             padding:.1rem .3rem;font-size:.9rem;border-radius:6px;opacity:0;
+             transition:opacity .1s ease, color .1s ease, background .1s ease}
+ .thread-item:hover .thread-del{opacity:1}
  .thread-del:hover{color:#c0362c;background:#fde8e6}
  .chat-panel{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--surface)}
  .chat-header{padding:.9rem 1.5rem;border-bottom:1px solid var(--border)}
@@ -112,8 +115,13 @@ def create_app(bot):
  .welcome h2{font-size:1.3rem;margin:0;font-weight:600}
  .suggestions{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-top:.5rem}
  .chip{background:var(--blue-50);border:1px solid var(--blue-100);color:var(--blue-700);
-       border-radius:999px;padding:.5rem .9rem;font:inherit;font-size:.83rem;cursor:pointer}
+       border-radius:999px;padding:.5rem .9rem;font:inherit;font-size:.83rem;cursor:pointer;
+       transition:background .12s ease}
  .chip:hover{background:var(--blue-100)}
+ .log::-webkit-scrollbar,.thread-list::-webkit-scrollbar{width:8px}
+ .log::-webkit-scrollbar-thumb,.thread-list::-webkit-scrollbar-thumb{
+   background:var(--blue-200);border-radius:8px}
+ .log::-webkit-scrollbar-track,.thread-list::-webkit-scrollbar-track{background:transparent}
  .msg{display:flex;gap:.65rem;max-width:100%}
  .msg.user{justify-content:flex-end}
  .msg-avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;
@@ -129,20 +137,24 @@ def create_app(bot):
  .fb-label{margin-right:.25rem}
  .fb-btn{width:24px;height:24px;border-radius:50%;border:1px solid var(--border);
          background:var(--surface);cursor:pointer;font-size:.72rem;color:var(--text-muted);
-         display:flex;align-items:center;justify-content:center}
+         display:flex;align-items:center;justify-content:center;
+         transition:all .12s ease}
  .fb-btn:hover{border-color:var(--blue-500);color:var(--blue-600);background:var(--blue-50)}
  .fb-done{color:var(--blue-600);font-weight:500}
  .composer{border-top:1px solid var(--border);padding:1rem 1.5rem 1.25rem}
  .composer-form{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:.5rem;
                 background:var(--bg);border:1px solid var(--border);border-radius:26px;
-                padding:.4rem .5rem .4rem 1.1rem}
+                padding:.4rem .5rem .4rem 1.1rem;
+                transition:border-color .12s ease, box-shadow .12s ease}
  .composer-form:focus-within{border-color:var(--blue-500);box-shadow:0 0 0 3px var(--blue-100)}
  .composer-form input{flex:1;border:none;background:transparent;font:inherit;font-size:.93rem;
                        padding:.5rem 0;outline:none;color:var(--text)}
  .send-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--blue-500);
            color:#fff;font-size:1rem;cursor:pointer;flex-shrink:0;
-           display:flex;align-items:center;justify-content:center}
+           display:flex;align-items:center;justify-content:center;
+           transition:background .12s ease, transform .1s ease}
  .send-btn:hover{background:var(--blue-600)}
+ .send-btn:active{transform:scale(.94)}
  .composer-hint{max-width:720px;margin:.5rem auto 0;text-align:center;font-size:.72rem;
                 color:var(--text-muted)}
 </style></head><body>
