@@ -112,11 +112,21 @@ class ChatBot:
         if not entities:
             return REPONSE_INCONNUE
 
-        # 5. Recherche dans le graphe : meilleure reponse + candidats
-        raw_answer = self.search.find_best_answer(entities, intent)
+        # 5. Recherche dans le graphe : candidats par tag exact de concept
+        # + candidats par proximite dans le graphe, calcules ENTITE PAR
+        # ENTITE (et non sur le score combine de toutes les entites a la
+        # fois). Sinon une entite tres generique et tres taguee (ex.
+        # "sport", present dans ~15 paires) ecrase par son volume les
+        # paires liees a une entite plus specifique mais moins frequente
+        # (ex. "manger" -> "nutrition") : la bonne reponse n'apparaissait
+        # alors jamais dans le pool soumis au re-ranking TF-IDF.
         candidats = self.kb.qa_for_concepts(entities)
-        if raw_answer and all(p["answer"] != raw_answer for p in candidats):
-            candidats = candidats + [{"question": "", "answer": raw_answer}]
+        vus = {p["answer"] for p in candidats}
+        for entity in entities:
+            for pair in self.search.top_candidates([entity], intent, n=3):
+                if pair["answer"] not in vus:
+                    candidats.append(pair)
+                    vus.add(pair["answer"])
         if not candidats:
             return REPONSE_INCONNUE
 

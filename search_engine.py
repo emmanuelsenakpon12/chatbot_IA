@@ -216,17 +216,22 @@ class SearchEngine:
     # ------------------------------------------------------------------
     # Orchestration : trouver la meilleure reponse
     # ------------------------------------------------------------------
-    def find_best_answer(self, entities: list[str], intent: str) -> str | None:
-        """Orchestre la recherche :
+    def _score_candidates(self, entities: list[str],
+                           intent: str) -> list[tuple[float, dict]]:
+        """Calcule le score de chaque paire Q/R par rapport aux entites :
         1. pour chaque entite, explore le voisinage (BFS borne, profondeur 2)
            en scorant chaque concept atteint par le produit des poids ;
         2. collecte les Q/R liees aux concepts atteints ;
         3. score chaque Q/R : somme des scores de ses concepts
-           + bonus si son intention correspond ;
-        4. retourne la meilleure reponse (None si rien trouve).
-        Le re-ranking fin par TF-IDF arrive a l'etape 4."""
+           + bonus si son intention correspond.
+        Retourne les paires (score, pair) triees du meilleur au moins bon
+        (liste vide si aucune entite connue). Facteur commun a
+        find_best_answer (le meilleur seul) et top_candidates (le top N,
+        utilise par le chatbot pour construire un pool de candidats plus
+        large que la correspondance exacte de concepts avant le
+        re-ranking TF-IDF)."""
         if not entities:
-            return None
+            return []
 
         # 1. Exploration ponderee du voisinage
         scores: dict[str, float] = {}
@@ -246,10 +251,10 @@ class SearchEngine:
                 frontier = suivant
 
         if not scores:
-            return None
+            return []
 
         # 2-3. Scorer les paires Q/R candidates
-        best_pair, best_score = None, 0.0
+        resultats = []
         for pair in self.kb.qa_pairs:
             concepts = pair.get("concepts", [])
             if not concepts:
@@ -260,11 +265,29 @@ class SearchEngine:
             # Bonus intention
             if intent and pair.get("intent") == intent:
                 s += 0.5
-            if s > best_score:
-                best_pair, best_score = pair, s
+            if s > 0.0:
+                resultats.append((s, pair))
 
-        # 4. Reponse
-        return best_pair["answer"] if best_pair else None
+        resultats.sort(key=lambda x: x[0], reverse=True)
+        return resultats
+
+    def find_best_answer(self, entities: list[str], intent: str) -> str | None:
+        """Retourne la meilleure reponse selon le score du graphe (None si
+        rien trouve). Le re-ranking fin par TF-IDF arrive a l'etape 4."""
+        resultats = self._score_candidates(entities, intent)
+        return resultats[0][1]["answer"] if resultats else None
+
+    def top_candidates(self, entities: list[str], intent: str,
+                        n: int = 5) -> list[dict]:
+        """Retourne les N paires Q/R les mieux notees par le score du
+        graphe (liste vide si aucune entite connue). Sert a fournir au
+        re-ranking TF-IDF un pool de candidats plus large que la seule
+        correspondance exacte de concepts (KnowledgeBase.qa_for_concepts) :
+        une paire peut etre pertinente sans partager litteralement un
+        concept avec les entites extraites, tant qu'elle est atteignable
+        dans le graphe."""
+        resultats = self._score_candidates(entities, intent)
+        return [pair for _s, pair in resultats[:n]]
 
     # ------------------------------------------------------------------
     # Comparaison mesuree BFS / DFS / A* (pour le rapport)

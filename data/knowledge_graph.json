@@ -61,7 +61,8 @@
     "abdominaux",
     "abdos",
     "gainage",
-    "jambes"
+    "jambes",
+    "manger"
   ],
   "relations": [
     {
@@ -618,6 +619,11 @@
       "src": "jambes",
       "dst": "squat",
       "weight": 0.75
+    },
+    {
+      "src": "manger",
+      "dst": "nutrition",
+      "weight": 0.8
     }
   ]
 }

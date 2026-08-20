@@ -153,3 +153,29 @@ def test_find_best_answer_via_voisinage():
     se = _engine()
     reponse = se.find_best_answer(["developpe_couche"], "QUESTION")
     assert reponse is not None
+
+
+# ----------------------------------------------------------------------
+# top_candidates
+# ----------------------------------------------------------------------
+def test_top_candidates_taille_et_ordre():
+    se = _engine()
+    top = se.top_candidates(["endurance"], "QUESTION", n=3)
+    assert len(top) <= 3
+    scores = [s for s, _p in se._score_candidates(["endurance"], "QUESTION")]
+    assert scores == sorted(scores, reverse=True)
+
+
+def test_top_candidates_sans_entites_connues():
+    se = _engine()
+    assert se.top_candidates([], "QUESTION") == []
+    assert se.top_candidates(["concept_inconnu"], "QUESTION") == []
+
+
+def test_top_candidates_coherent_avec_find_best_answer():
+    """find_best_answer doit toujours correspondre au premier candidat
+    de top_candidates (meme scoring, juste une vue tronquee a 1 vs N)."""
+    se = _engine()
+    reponse = se.find_best_answer(["endurance"], "QUESTION")
+    top = se.top_candidates(["endurance"], "QUESTION", n=1)
+    assert top[0]["answer"] == reponse

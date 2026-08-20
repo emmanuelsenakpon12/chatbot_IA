@@ -78,6 +78,17 @@ def test_question_musculation():
     assert "1,6" in reponse or "proteines" in reponse.lower()
 
 
+def test_candidats_entite_specifique_pas_ecrasee_par_entite_generique():
+    """Regression : quand la question extrait a la fois une entite tres
+    generique et tres frequente ('sport', tagguee sur ~15 paires) et une
+    entite plus specifique ('manger' -> 'nutrition'), la bonne reponse
+    (liee a la specifique) ne doit pas etre evincee du pool de candidats
+    par le volume des paires liees a la generique."""
+    bot = _bot()
+    reponse = bot.answer("Que manger avant le sport ?")
+    assert "avant" in reponse.lower() and "glucides" in reponse.lower()
+
+
 def test_robustesse_faute_de_frappe():
     bot = _bot()
     reponse = bot.answer("c'est quoi le footbal ?")
