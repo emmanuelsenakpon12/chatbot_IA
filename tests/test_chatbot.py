@@ -90,6 +90,18 @@ def test_relance_sans_sujet_reutilise_l_historique():
     assert reponse != REPONSE_INCONNUE
 
 
+def test_chaine_de_relances_sans_sujet():
+    """Regression : une 2e relance ('pourquoi ?' apres 'pourquoi ?') ne
+    doit pas echouer sous pretexte que le message juste precedent est
+    lui-meme sans sujet propre. Reproduit le scenario observe : Que
+    manger avant le sport ? -> pourquoi -> pourquoi (echouait avant le
+    correctif, l'historique s'arretant au 'pourquoi' precedent)."""
+    bot = _bot()
+    historique = ["Que manger avant le sport ?", "pourquoi"]
+    reponse = bot.answer("pourquoi", historique=historique)
+    assert reponse != REPONSE_INCONNUE
+
+
 def test_historique_ignore_si_question_a_deja_un_sujet():
     """L'historique ne doit servir que de filet de secours : s'il y a deja
     une entite dans la question, l'historique (meme hors-sujet) ne doit

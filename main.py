@@ -94,9 +94,11 @@ class ChatBot:
         conversation en cours (le plus recent en dernier), optionnel.
         Sert uniquement de filet de secours pour les relances sans sujet
         propre ("pourquoi ?", "et donc ?") : si l'extraction d'entites sur
-        `user_input` seul echoue, on retente sur le dernier message de
-        l'historique pour retomber sur le sujet en cours plutot que de
-        repondre REPONSE_INCONNUE. Le bot lui-meme reste sans etat (voir
+        `user_input` seul echoue, on remonte l'historique (du plus recent
+        au plus ancien) jusqu'a trouver un message qui a lui-meme un
+        sujet, pour retomber sur le sujet en cours plutot que de repondre
+        REPONSE_INCONNUE meme apres plusieurs relances a la suite. Le bot
+        lui-meme reste sans etat (voir
         note d'architecture dans ui.py) ; c'est l'appelant (CLI ou client
         web) qui conserve et transmet cet historique."""
         if not user_input or not user_input.strip():
@@ -125,8 +127,16 @@ class ChatBot:
         # 4. Extraction d'entites (+ relance conversationnelle en secours)
         entities = self.nlp.extract_entities(tokens_bruts, self.kb)
         if not entities and historique:
-            dernier_tokens = self.nlp.tokenize(historique[-1])
-            entities = self.nlp.extract_entities(dernier_tokens, self.kb)
+            # Remonte l'historique (le plus recent d'abord) jusqu'a trouver
+            # un message qui a lui-meme un sujet : une chaine de relances
+            # ("pourquoi ?" puis encore "pourquoi ?") ne doit pas s'arreter
+            # sur le message precedent s'il est lui aussi sans entite.
+            for message in reversed(historique):
+                candidates = self.nlp.extract_entities(
+                    self.nlp.tokenize(message), self.kb)
+                if candidates:
+                    entities = candidates
+                    break
         if not entities:
             return REPONSE_INCONNUE
 
