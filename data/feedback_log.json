@@ -61,5 +61,33 @@
     "score": 3,
     "timestamp": 1787255472.393679,
     "applique": true
+  },
+  {
+    "question": "Que manger avant le sport ?",
+    "answer": "Avant une seance, privilegier un repas riche en glucides complexes (riz, pates, avoine) 2 a 3 heures avant l'effort, et eviter les aliments trop gras.",
+    "score": 3,
+    "timestamp": 1787260974.13273,
+    "applique": true
+  },
+  {
+    "question": "pourquoi",
+    "answer": "Le sport ameliore la sante cardiovasculaire, renforce les muscles et les os, reduit le stress, ameliore le sommeil et diminue le risque de nombreuses maladies.",
+    "score": 2,
+    "timestamp": 1787260977.304613,
+    "applique": true
+  },
+  {
+    "question": "pourquoi",
+    "answer": "Je n'ai pas trouve de reponse a cette question. Essayez de reformuler ou posez une question sur le sport, la musculation ou la nutrition.",
+    "score": 1,
+    "timestamp": 1787260979.7938929,
+    "applique": true
+  },
+  {
+    "question": "pourquoi manger",
+    "answer": "Avant une seance, privilegier un repas riche en glucides complexes (riz, pates, avoine) 2 a 3 heures avant l'effort, et eviter les aliments trop gras.",
+    "score": 1,
+    "timestamp": 1787260985.0029793,
+    "applique": true
   }
 ]
