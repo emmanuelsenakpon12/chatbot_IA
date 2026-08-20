@@ -104,8 +104,18 @@ def create_app(bot):
  .chat-header{padding:.9rem 1.5rem;border-bottom:1px solid var(--border)}
  .chat-header h1{font-size:.95rem;font-weight:600;margin:0}
  .log{flex:1;overflow-y:auto;padding:1.25rem 1.5rem;background:#fafafa}
- .u{color:#0b57d0;margin:.4rem 0}.b{color:#222;margin:.4rem 0}
- .fb{font-size:.85rem;color:#666;margin:0 0 .8rem 0}
+ .log-inner{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:1rem}
+ .msg{display:flex;gap:.65rem;max-width:100%}
+ .msg.user{justify-content:flex-end}
+ .msg-avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;
+             display:flex;align-items:center;justify-content:center;font-size:.85rem;
+             background:var(--blue-500);color:#fff;font-weight:600}
+ .msg-body{max-width:74%}
+ .msg.user .msg-body{background:var(--blue-500);color:#fff;padding:.65rem .95rem;
+                      border-radius:18px 18px 4px 18px}
+ .msg.bot .msg-body{background:transparent;color:var(--text);padding:.15rem 0;max-width:100%}
+ .msg-text{white-space:pre-wrap;line-height:1.5;font-size:.93rem}
+ .fb{font-size:.85rem;color:#666;margin:.4rem 0 0}
  .fb button{padding:.1rem .45rem;margin-right:.2rem;cursor:pointer}
  .composer{border-top:1px solid var(--border);padding:1rem 1.5rem 1.25rem}
  form{display:flex;gap:.5rem}input[type=text]{flex:1;padding:.5rem}
@@ -228,24 +238,28 @@ function renderLog(){
   const thread=getCurrentThread();
   if(!thread)return;
   chatTitle.textContent=thread.title;
+  const inner=document.createElement('div');
+  inner.className='log-inner';
+  log.appendChild(inner);
   thread.messages.forEach(m=>{
     if(m.type==='u'){
-      log.insertAdjacentHTML('beforeend',
-        `<p class='u'><b>Vous :</b> ${esc(m.text)}</p>`);
+      inner.insertAdjacentHTML('beforeend',
+        `<div class='msg user'><div class='msg-body'><div class='msg-text'>${esc(m.text)}</div></div></div>`);
       return;
     }
-    log.insertAdjacentHTML('beforeend',
-      `<p class='b'><b>Bot :</b> ${esc(m.text)}</p>`);
+    inner.insertAdjacentHTML('beforeend',
+      `<div class='msg bot'><div class='msg-avatar'>B</div><div class='msg-body'>
+         <div class='msg-text'>${esc(m.text)}</div>
+         <div class='fb' id='${m.id}'></div>
+       </div></div>`);
+    const zone=document.getElementById(m.id);
     if(m.noFeedback)return;
     if(m.feedback){
-      log.insertAdjacentHTML('beforeend',
-        `<p class='fb' id='${m.id}'>Merci, feedback enregistre !</p>`);
+      zone.textContent='Merci, feedback enregistre !';
       return;
     }
-    log.insertAdjacentHTML('beforeend',
-      `<p class='fb' id='${m.id}'>Noter cette reponse :
-       ${[1,2,3,4,5].map(n=>`<button type='button' data-score='${n}'>${n}</button>`).join('')}</p>`);
-    const zone=document.getElementById(m.id);
+    zone.innerHTML='Noter cette reponse : '+
+      [1,2,3,4,5].map(n=>`<button type='button' data-score='${n}'>${n}</button>`).join('');
     zone.querySelectorAll('button').forEach(b=>{
       b.onclick=async()=>{
         const score=parseInt(b.dataset.score,10);
