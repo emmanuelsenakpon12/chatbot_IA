@@ -239,6 +239,37 @@ class LearningEngine:
             self.train_naive_bayes(list(X), list(y))
         return resume
 
+    def replay_feedback_sur_graphe(self) -> dict:
+        """Reapplique la totalite de l'historique de feedback sur le
+        graphe courant. A appeler UNE FOIS au demarrage, juste apres avoir
+        charge le graphe (knowledge_graph.json, poids "d'auteur" fixes) et
+        le journal (load_feedback) : sans cela, les ajustements de poids
+        appris pendant une session precedente (retrain) restent en memoire
+        pour cette session-la seulement et disparaissent au redemarrage,
+        alors que knowledge_graph.json n'est jamais reecrit. Le journal de
+        feedback est la seule source persistante ; on le rejoue donc en
+        entier ici pour reconstruire l'etat appris, ce qui est independant
+        du flag "applique" (marque par retrain() pour ne pas rejouer deux
+        fois un feedback DANS une meme session)."""
+        resume = {"renforces": 0, "penalises": 0, "aretes_modifiees": 0}
+        if self.kb is None:
+            return resume
+        for fb in self.feedback_log:
+            pair = self._trouver_pair(fb["answer"])
+            if not pair:
+                continue
+            delta = (self.DELTA_POIDS if fb["score"] >= 4
+                     else -self.DELTA_POIDS if fb["score"] <= 2 else 0.0)
+            if not delta:
+                continue
+            n = self._ajuster_poids(pair.get("concepts", []), delta)
+            resume["aretes_modifiees"] += n
+            if delta > 0:
+                resume["renforces"] += 1
+            else:
+                resume["penalises"] += 1
+        return resume
+
     def _trouver_pair(self, answer: str) -> dict | None:
         """Retrouve la paire Q/R correspondant a une reponse donnee."""
         if self.kb is None:

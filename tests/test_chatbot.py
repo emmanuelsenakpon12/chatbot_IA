@@ -78,6 +78,29 @@ def test_question_musculation():
     assert "1,6" in reponse or "proteines" in reponse.lower()
 
 
+def test_relance_sans_sujet_reutilise_l_historique():
+    """Une relance sans entite propre ("pourquoi ?") echoue seule, mais
+    retombe sur le sujet de la question precedente si on lui transmet
+    l'historique (comme le fait le client CLI/web)."""
+    bot = _bot()
+    assert bot.answer("pourquoi") == REPONSE_INCONNUE
+    question_precedente = "Que manger avant le sport ?"
+    bot.answer(question_precedente)
+    reponse = bot.answer("pourquoi", historique=[question_precedente])
+    assert reponse != REPONSE_INCONNUE
+
+
+def test_historique_ignore_si_question_a_deja_un_sujet():
+    """L'historique ne doit servir que de filet de secours : s'il y a deja
+    une entite dans la question, l'historique (meme hors-sujet) ne doit
+    pas influencer la reponse."""
+    bot = _bot()
+    with_hist = bot.answer("Qu'est-ce que le football ?",
+                            historique=["Qu'est-ce que la nutrition ?"])
+    without_hist = bot.answer("Qu'est-ce que le football ?")
+    assert with_hist == without_hist
+
+
 def test_candidats_entite_specifique_pas_ecrasee_par_entite_generique():
     """Regression : quand la question extrait a la fois une entite tres
     generique et tres frequente ('sport', tagguee sur ~15 paires) et une
@@ -166,3 +189,21 @@ def test_feedback_de_bout_en_bout(tmp_path):
     assert bot.kb.graph["football"]["sport"] >= avant
     with open(log_path, encoding="utf-8") as f:
         assert len(json.load(f)) == avant_nb + 1
+
+
+def test_apprentissage_survit_a_un_redemarrage(tmp_path):
+    """Regression : le poids du graphe appris via feedback ne doit pas
+    etre perdu quand le bot est recree (simule un redemarrage du serveur
+    web, qui garde une seule instance de ChatBot vivante entre les
+    requetes mais la reconstruit entierement a chaque redeploiement)."""
+    import shutil
+    data_tmp = tmp_path / "data"
+    shutil.copytree(DATA_DIR, data_tmp)
+
+    bot1 = ChatBot(str(data_tmp))
+    pair = bot1.kb.qa_pairs[1]  # definition du football
+    bot1.give_feedback("qu est ce que le football", pair["answer"], 5)
+    poids_appris = bot1.kb.graph["football"]["sport"]
+
+    bot2 = ChatBot(str(data_tmp))  # nouvelle instance, memes fichiers
+    assert bot2.kb.graph["football"]["sport"] == poids_appris

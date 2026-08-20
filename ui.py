@@ -7,12 +7,16 @@ ui.py - Interfaces utilisateur du ChatBot IA (Etape 5)
 """
 
 
+HISTORIQUE_MAX = 5  # nombre de messages recents conserves pour les relances
+
+
 def run_cli(bot) -> None:
     """Interface en ligne de commande avec boucle de feedback."""
     print("=" * 56)
     print("  ChatBot IA - Sport, musculation & nutrition")
     print("  Tapez 'quit' pour quitter")
     print("=" * 56)
+    historique: list[str] = []
     while True:
         try:
             user_input = input("\nVous : ").strip()
@@ -25,8 +29,10 @@ def run_cli(bot) -> None:
             print("Bot : Au revoir, et bon entrainement !")
             break
 
-        response = bot.answer(user_input)
+        response = bot.answer(user_input, historique=historique)
         print(f"Bot : {response}")
+        historique.append(user_input)
+        del historique[:-HISTORIQUE_MAX]
 
         # Feedback optionnel (Entree pour passer)
         try:
@@ -361,9 +367,16 @@ async function ask(){
   renderSidebar();
   renderLog();
   try{
+    // Historique : les questions precedentes de CE fil, pour que le
+    // serveur (sans etat) puisse resoudre une relance sans sujet propre
+    // ("pourquoi ?") en retombant sur le sujet de la question precedente.
+    const history=thread.messages
+      .filter(m=>m.type==='u')
+      .slice(-6,-1)
+      .map(m=>m.text);
     const r=await fetch('/ask',{method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({question})});
+      body:JSON.stringify({question,history})});
     const d=await r.json();
     thread.messages.push({type:'b', text:d.answer, question, id:genId(), feedback:null});
   }catch(e){
@@ -409,7 +422,10 @@ renderLog();
     def ask():
         data = request.get_json(silent=True) or {}
         question = data.get("question", "")
-        return jsonify({"answer": bot.answer(question)})
+        history = data.get("history", "")
+        historique = [h for h in history if isinstance(h, str)] \
+            if isinstance(history, list) else None
+        return jsonify({"answer": bot.answer(question, historique=historique)})
 
     @app.route("/feedback", methods=["POST"])
     def feedback():

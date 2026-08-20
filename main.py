@@ -67,6 +67,11 @@ class ChatBot:
         self.kb.load_from_json(os.path.join(data_dir, "knowledge_graph.json"))
         self.kb.load_qa_pairs(os.path.join(data_dir, "qa_pairs.json"))
         self.learner.load_feedback(os.path.join(data_dir, "feedback_log.json"))
+        # Reconstruit les poids appris des sessions precedentes : sans ce
+        # rejeu, chaque redemarrage repartait des poids "d'auteur" fixes
+        # de knowledge_graph.json et l'apprentissage ne survivait jamais
+        # a un redemarrage du bot.
+        self.learner.replay_feedback_sur_graphe()
 
         # TF-IDF sur les documents question+reponse pretraites
         documents = [self.nlp.preprocess(p["question"] + " " + p["answer"])
@@ -82,8 +87,18 @@ class ChatBot:
         self.learner.train_naive_bayes(X, y)
 
     # ------------------------------------------------------------------
-    def answer(self, user_input: str) -> str:
-        """Pipeline complet de traitement d'une question."""
+    def answer(self, user_input: str, historique: list[str] | None = None) -> str:
+        """Pipeline complet de traitement d'une question.
+
+        `historique` : messages precedents de l'utilisateur dans la
+        conversation en cours (le plus recent en dernier), optionnel.
+        Sert uniquement de filet de secours pour les relances sans sujet
+        propre ("pourquoi ?", "et donc ?") : si l'extraction d'entites sur
+        `user_input` seul echoue, on retente sur le dernier message de
+        l'historique pour retomber sur le sujet en cours plutot que de
+        repondre REPONSE_INCONNUE. Le bot lui-meme reste sans etat (voir
+        note d'architecture dans ui.py) ; c'est l'appelant (CLI ou client
+        web) qui conserve et transmet cet historique."""
         if not user_input or not user_input.strip():
             return "Je vous ecoute ! Posez-moi une question sur le sport."
 
@@ -107,8 +122,11 @@ class ChatBot:
         if intent == "IDENTITE":
             return self.REPONSE_IDENTITE
 
-        # 4. Extraction d'entites
+        # 4. Extraction d'entites (+ relance conversationnelle en secours)
         entities = self.nlp.extract_entities(tokens_bruts, self.kb)
+        if not entities and historique:
+            dernier_tokens = self.nlp.tokenize(historique[-1])
+            entities = self.nlp.extract_entities(dernier_tokens, self.kb)
         if not entities:
             return REPONSE_INCONNUE
 

@@ -139,6 +139,38 @@ def test_record_feedback_et_boost():
     assert len(le.feedback_log) == 2
 
 
+def test_replay_feedback_sur_graphe_reconstruit_les_poids():
+    """Regression : l'apprentissage doit survivre a un redemarrage.
+    Simule 2 sessions successives sur les MEMES fichiers (le graphe est
+    rechage a chaque fois depuis knowledge_graph.json, poids d'auteur
+    fixes) : la 2e session doit retrouver le poids appris par la 1ere."""
+    kb1 = _kb()
+    le1 = LearningEngine(kb1)
+    pair = kb1.qa_pairs[1]  # definition du football
+    avant = kb1.graph["football"]["sport"]
+    le1.record_feedback("qu est ce que le football", pair["answer"], 5)
+    le1.retrain()
+    apres_session_1 = kb1.graph["football"]["sport"]
+    assert apres_session_1 > avant
+
+    # "Redemarrage" : nouveau graphe frais (poids d'auteur) + rejeu du
+    # feedback_log en memoire (pas de load_feedback ici, feedback_log
+    # est deja peuple sur le meme objet le1 -- on simule juste le rejeu
+    # que _load_data ferait sur un graphe fraichement charge).
+    kb2 = _kb()
+    le2 = LearningEngine(kb2)
+    le2.feedback_log = le1.feedback_log
+    assert kb2.graph["football"]["sport"] == avant  # etat "d'auteur"
+    resume = le2.replay_feedback_sur_graphe()
+    assert resume["renforces"] == 1
+    assert kb2.graph["football"]["sport"] == pytest.approx(apres_session_1)
+
+
+def test_replay_feedback_sur_graphe_sans_kb():
+    assert LearningEngine().replay_feedback_sur_graphe() == \
+        {"renforces": 0, "penalises": 0, "aretes_modifiees": 0}
+
+
 def test_retrain_modifie_les_poids_du_graphe():
     kb = _kb()
     le = LearningEngine(kb)
