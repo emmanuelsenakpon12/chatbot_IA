@@ -28,7 +28,7 @@ class ChatBot:
     """Orchestrateur principal : relie les 4 modules du systeme."""
 
     # Exemples supplementaires pour entrainer Naive Bayes sur les
-    # intentions absentes des paires Q/R (salutation, quitter)
+    # intentions absentes des paires Q/R (salutation, quitter, identite)
     _EXEMPLES_NB = [
         (["bonjour"], "SALUTATION"),
         (["salut", "ca", "va"], "SALUTATION"),
@@ -40,7 +40,18 @@ class ChatBot:
         (["bye"], "QUITTER"),
         (["exit"], "QUITTER"),
         (["stop"], "QUITTER"),
+        (["qui", "es", "tu"], "IDENTITE"),
+        (["tu", "es", "specialise", "dans", "quoi"], "IDENTITE"),
+        (["que", "peux", "tu", "faire"], "IDENTITE"),
+        (["presente", "toi"], "IDENTITE"),
     ]
+
+    REPONSE_IDENTITE = (
+        "Je suis un assistant specialise dans le sport, la musculation et "
+        "la nutrition. Tu peux me poser des questions sur les differents "
+        "sports, les exercices de musculation, l'entrainement, la "
+        "recuperation, la perte de poids ou la prise de masse."
+    )
 
     def __init__(self, data_dir: str = "data/") -> None:
         self.kb = KnowledgeBase()
@@ -93,6 +104,8 @@ class ChatBot:
                     "et nutrition. Comment puis-je vous aider ?")
         if intent == "QUITTER":
             return "Au revoir, et bon entrainement !"
+        if intent == "IDENTITE":
+            return self.REPONSE_IDENTITE
 
         # 4. Extraction d'entites
         entities = self.nlp.extract_entities(tokens_bruts, self.kb)

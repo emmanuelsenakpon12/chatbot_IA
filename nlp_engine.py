@@ -58,8 +58,8 @@ class SimpleFrenchStemmer:
 class NLPEngine:
     """Moteur de traitement du langage naturel pour le domaine sport."""
 
-    INTENTS = ("SALUTATION", "QUITTER", "DEFINITION", "COMPARAISON",
-               "QUESTION", "INCONNU")
+    INTENTS = ("SALUTATION", "QUITTER", "IDENTITE", "DEFINITION",
+               "COMPARAISON", "QUESTION", "INCONNU")
 
     # Regles V1 : mots-cles par intention, appliquees sur tokens BRUTS.
     # Les cles multi-mots sont cherchees comme sous-chaines du texte joint.
@@ -70,6 +70,17 @@ class NLPEngine:
         "QUITTER": [
             "quitter", "quitte", "quit", "exit", "bye", "aurevoir",
             "au revoir", "stop", "terminer", "fin de la conversation",
+        ],
+        # Questions sur le bot lui-meme (pas sur le domaine sport) : elles
+        # ne doivent pas partir en recherche d'entites dans le graphe.
+        "IDENTITE": [
+            "specialise", "specialisee", "specialite", "specialites",
+            "qui es tu", "qui etes vous", "tu es qui",
+            "que peux tu faire", "que sais tu faire", "tu sais faire quoi",
+            "tu fais quoi", "que fais tu", "a quoi tu sers", "a quoi sers tu",
+            "tes capacites", "capable de faire", "presente toi",
+            "quel est ton role", "c est quoi ton role",
+            "tu t appelles", "ton nom", "quel est ton nom",
         ],
         "DEFINITION": [
             "qu est ce que", "qu est ce qu", "c est quoi", "cest quoi",
@@ -156,11 +167,13 @@ class NLPEngine:
         """Classifie l'intention par regles de mots-cles.
 
         `tokens` = tokens BRUTS (sortie de tokenize, sans stemming).
-        Priorite : SALUTATION > QUITTER > DEFINITION > COMPARAISON >
-        QUESTION > INCONNU. La priorite garantit par exemple que
-        "qu est ce que la difference entre X et Y" -> on regarde d'abord
+        Priorite : SALUTATION > QUITTER > IDENTITE > DEFINITION >
+        COMPARAISON > QUESTION > INCONNU. La priorite garantit par exemple
+        que "qu est ce que la difference entre X et Y" -> on regarde d'abord
         DEFINITION... mais 'difference' etant plus specifique, COMPARAISON
-        est teste via une regle dediee ci-dessous.
+        est teste via une regle dediee ci-dessous. IDENTITE passe avant
+        QUESTION pour que "qui es-tu ?" ne soit pas capture par le
+        mot-cle generique "qui" de QUESTION.
         """
         text = " ".join(tokens)
 
@@ -171,7 +184,7 @@ class NLPEngine:
             if (kw in tokens) if " " not in kw else (kw in text):
                 return "COMPARAISON"
 
-        for intent in ("SALUTATION", "QUITTER", "DEFINITION", "QUESTION"):
+        for intent in ("SALUTATION", "QUITTER", "IDENTITE", "DEFINITION", "QUESTION"):
             for kw in self._INTENT_RULES[intent]:
                 if " " not in kw:
                     if kw in tokens:

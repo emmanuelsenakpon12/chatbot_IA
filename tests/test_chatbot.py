@@ -50,6 +50,22 @@ def test_salutation_et_quitter():
     assert "Au revoir" in bot.answer("je veux quitter")
 
 
+def test_questions_sur_identite_du_bot():
+    """Meta-questions sur le bot lui-meme (pas sur le domaine sport) :
+    elles ne doivent pas partir en recherche d'entites dans le graphe
+    et renvoyer REPONSE_INCONNUE, mais une reponse dediee."""
+    bot = _bot()
+    for question in [
+        "Tu es specialise dans quoi ?",
+        "Qui es-tu ?",
+        "Que peux-tu faire ?",
+        "Presente-toi",
+        "Comment tu t'appelles ?",
+    ]:
+        reponse = bot.answer(question)
+        assert reponse == bot.REPONSE_IDENTITE, (question, reponse)
+
+
 def test_definition_simple():
     bot = _bot()
     reponse = bot.answer("Qu'est-ce que le football ?")
