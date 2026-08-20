@@ -70,15 +70,16 @@ def create_app(bot):
    --shadow-sm:0 1px 2px rgba(20,30,60,.06);--shadow-md:0 4px 16px rgba(20,30,60,.08);
  }
  *{box-sizing:border-box}
+ html,body{height:100%;margin:0}
  body{font-family:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
-      background:var(--bg);color:var(--text);
-      max-width:900px;margin:2rem auto;padding:0 1rem;
-      display:flex;gap:1rem}
- .sidebar{width:220px;flex-shrink:0;display:flex;flex-direction:column}
+      background:var(--bg);color:var(--text)}
+ .app{display:flex;height:100vh;overflow:hidden}
+ .sidebar{width:220px;flex-shrink:0;display:flex;flex-direction:column;
+          background:var(--bg-sidebar);border-right:1px solid var(--border);
+          padding:1rem .75rem;gap:.5rem;overflow-y:auto}
  .sidebar h3{margin:.2rem 0 .6rem 0;font-size:1rem}
  #newThread{padding:.5rem;margin-bottom:.6rem;cursor:pointer}
- #threads{border:1px solid #ccc;border-radius:8px;overflow-y:auto;
-          flex:1;height:420px}
+ #threads{border:1px solid #ccc;border-radius:8px;overflow-y:auto;flex:1}
  .thread-item{display:flex;align-items:center;justify-content:space-between;
               padding:.5rem .6rem;cursor:pointer;border-bottom:1px solid #eee;
               font-size:.9rem}
@@ -88,31 +89,37 @@ def create_app(bot):
  .thread-del{background:none;border:none;color:#999;cursor:pointer;
              padding:0 .2rem;font-size:1rem}
  .thread-del:hover{color:#c00}
- .main{flex:1;min-width:0}
- h2{font-size:1.15rem}
- #log{border:1px solid #ccc;border-radius:8px;padding:1rem;height:340px;
-      overflow-y:auto;margin-bottom:1rem;background:#fafafa}
+ .chat-panel{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--surface)}
+ .chat-header{padding:.9rem 1.5rem;border-bottom:1px solid var(--border)}
+ .chat-header h1{font-size:.95rem;font-weight:600;margin:0}
+ .log{flex:1;overflow-y:auto;padding:1.25rem 1.5rem;background:#fafafa}
  .u{color:#0b57d0;margin:.4rem 0}.b{color:#222;margin:.4rem 0}
  .fb{font-size:.85rem;color:#666;margin:0 0 .8rem 0}
  .fb button{padding:.1rem .45rem;margin-right:.2rem;cursor:pointer}
+ .composer{border-top:1px solid var(--border);padding:1rem 1.5rem 1.25rem}
  form{display:flex;gap:.5rem}input[type=text]{flex:1;padding:.5rem}
  button{padding:.5rem 1rem}
 </style></head><body>
-<div class='sidebar'>
+<div class='app'>
+<aside class='sidebar' id='sidebar'>
  <h3>Fils de conversation</h3>
- <button id='newThread' type='button'>+ Nouvelle conversation</button>
+ <button id='newThread' type='button'>+ Nouvelle discussion</button>
  <div id='threads'></div>
-</div>
-<div class='main'>
-<h2>ChatBot IA - Sport, musculation &amp; nutrition</h2>
-<div id='log'></div>
+</aside>
+<main class='chat-panel'>
+<header class='chat-header'><h1 id='chatTitle'>Nouvelle discussion</h1></header>
+<div id='log' class='log'></div>
+<div class='composer'>
 <form id='chat'>
  <input type='text' id='q' placeholder='Votre question...' autocomplete='off' autofocus>
  <button type='submit'>Envoyer</button>
 </form>
 </div>
+</main>
+</div>
 <script>
 const log=document.getElementById('log');
+const chatTitle=document.getElementById('chatTitle');
 const threadList=document.getElementById('threads');
 const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
   '"':'&quot;',"'":'&#39;'}[c]));
@@ -122,7 +129,7 @@ let threads=[];
 let currentId=null;
 
 function newEmptyThread(){
-  return {id:genId(), title:'Nouvelle conversation', messages:[]};
+  return {id:genId(), title:'Nouvelle discussion', messages:[]};
 }
 
 function loadThreads(){
@@ -208,6 +215,7 @@ function renderLog(){
   log.innerHTML='';
   const thread=getCurrentThread();
   if(!thread)return;
+  chatTitle.textContent=thread.title;
   thread.messages.forEach(m=>{
     if(m.type==='u'){
       log.insertAdjacentHTML('beforeend',
@@ -249,7 +257,7 @@ async function ask(){
   const thread=getCurrentThread();
   thread.messages.push({type:'u', text:question});
   const userMsgCount=thread.messages.filter(m=>m.type==='u').length;
-  if(thread.title==='Nouvelle conversation' && userMsgCount===1){
+  if(thread.title==='Nouvelle discussion' && userMsgCount===1){
     thread.title = question.length>30 ? question.slice(0,30)+'…' : question;
   }
   saveThreads();
