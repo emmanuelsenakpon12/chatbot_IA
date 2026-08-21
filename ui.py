@@ -156,6 +156,10 @@ def create_app(bot):
                       border-radius:18px 18px 4px 18px}
  .msg.bot .msg-body{background:transparent;color:var(--text);padding:.15rem 0;max-width:100%}
  .msg-text{white-space:pre-wrap;line-height:1.5;font-size:.93rem}
+ .msg-text.typing::after{content:'';display:inline-block;width:2px;height:1em;
+   background:var(--blue-500);margin-left:2px;vertical-align:text-bottom;
+   animation:curseur-clignote 1s step-start infinite}
+ @keyframes curseur-clignote{50%{opacity:0}}
  .fb{display:flex;align-items:center;gap:.3rem;margin-top:.4rem;
      font-size:.78rem;color:var(--text-muted)}
  .fb-label{margin-right:.25rem}
@@ -352,7 +356,57 @@ function renderSidebar(){
   });
 }
 
-function renderLog(){
+// ------------------------------------------------------------------
+// Effet machine a ecrire sur la derniere reponse du bot
+// ------------------------------------------------------------------
+const TYPING_MS_PAR_LETTRE=14;
+let typingTimer=null;
+
+function stopTyping(){
+  if(typingTimer){ clearInterval(typingTimer); typingTimer=null; }
+}
+
+function typeWriter(el, texte, onDone){
+  stopTyping();
+  el.textContent='';
+  el.classList.add('typing');
+  let i=0;
+  typingTimer=setInterval(()=>{
+    i++;
+    el.textContent=texte.slice(0,i);
+    log.scrollTop=log.scrollHeight;
+    if(i>=texte.length){
+      stopTyping();
+      el.classList.remove('typing');
+      if(onDone) onDone();
+    }
+  }, TYPING_MS_PAR_LETTRE);
+}
+
+function renderFeedbackZone(zone, m){
+  if(m.noFeedback)return;
+  if(m.feedback){
+    zone.innerHTML=`<span class='fb-done'>Merci, feedback enregistre !</span>`;
+    return;
+  }
+  zone.innerHTML=`<span class='fb-label'>Utile ?</span>`+
+    [1,2,3,4,5].map(n=>`<button type='button' class='fb-btn' data-score='${n}'>${n}</button>`).join('');
+  zone.querySelectorAll('.fb-btn').forEach(b=>{
+    b.onclick=async()=>{
+      const score=parseInt(b.dataset.score,10);
+      await fetch('/feedback',{method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({question:m.question,answer:m.text,score})});
+      m.feedback=score;
+      saveThreads();
+      zone.innerHTML=`<span class='fb-done'>Merci, feedback enregistre !</span>`;
+    };
+  });
+}
+
+function renderLog(opts){
+  opts=opts||{};
+  stopTyping();
   log.innerHTML='';
   const thread=getCurrentThread();
   if(!thread)return;
@@ -378,7 +432,8 @@ function renderLog(){
   const inner=document.createElement('div');
   inner.className='log-inner';
   log.appendChild(inner);
-  thread.messages.forEach(m=>{
+  const dernierIdx=thread.messages.length-1;
+  thread.messages.forEach((m,idx)=>{
     if(m.type==='u'){
       inner.insertAdjacentHTML('beforeend',
         `<div class='msg user'><div class='msg-body'><div class='msg-text'>${esc(m.text)}</div></div></div>`);
@@ -386,28 +441,17 @@ function renderLog(){
     }
     inner.insertAdjacentHTML('beforeend',
       `<div class='msg bot'><div class='msg-avatar'>B</div><div class='msg-body'>
-         <div class='msg-text'>${esc(m.text)}</div>
+         <div class='msg-text' id='txt-${m.id}'></div>
          <div class='fb' id='${m.id}'></div>
        </div></div>`);
+    const texteEl=document.getElementById('txt-'+m.id);
     const zone=document.getElementById(m.id);
-    if(m.noFeedback)return;
-    if(m.feedback){
-      zone.innerHTML=`<span class='fb-done'>Merci, feedback enregistre !</span>`;
-      return;
+    if(opts.animateLast && idx===dernierIdx){
+      typeWriter(texteEl, m.text, ()=>renderFeedbackZone(zone, m));
+    }else{
+      texteEl.textContent=m.text;
+      renderFeedbackZone(zone, m);
     }
-    zone.innerHTML=`<span class='fb-label'>Utile ?</span>`+
-      [1,2,3,4,5].map(n=>`<button type='button' class='fb-btn' data-score='${n}'>${n}</button>`).join('');
-    zone.querySelectorAll('.fb-btn').forEach(b=>{
-      b.onclick=async()=>{
-        const score=parseInt(b.dataset.score,10);
-        await fetch('/feedback',{method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({question:m.question,answer:m.text,score})});
-        m.feedback=score;
-        saveThreads();
-        zone.innerHTML=`<span class='fb-done'>Merci, feedback enregistre !</span>`;
-      };
-    });
   });
   log.scrollTop=log.scrollHeight;
 }
@@ -444,7 +488,7 @@ async function ask(){
       question, id:genId(), noFeedback:true});
   }
   saveThreads();
-  renderLog();
+  renderLog({animateLast:true});
 }
 
 document.getElementById('newThread').addEventListener('click',()=>{
