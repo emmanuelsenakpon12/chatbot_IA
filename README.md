@@ -64,6 +64,18 @@ pytest
 
 Les tests couvrent chaque module (NLP, base de connaissances, recherche, apprentissage) ainsi que le chatbot complet en integration (conversation sur plusieurs questions, temps de reponse moyen).
 
+## Deploiement (Render)
+
+L'application peut etre deployee sur [Render](https://render.com) en tant que Web Service :
+
+1. Connecter le depot GitHub `chatbot_IA` a Render (New > Web Service).
+2. Configurer :
+   - **Build command** : `pip install -r requirements.txt`
+   - **Start command** : `gunicorn app:app --bind 0.0.0.0:$PORT`
+3. Deployer. Render fournit une URL publique servant l'interface web du chatbot.
+
+Note : le plan gratuit de Render utilise un disque ephemere qui repart de l'etat du depot a chaque redeploiement/redemarrage : l'historique de feedback (`data/feedback_log.json`) n'est donc persistant qu'entre deux redeploiements, pas au-dela.
+
 ## Documentation
 
 Un rapport detaille (`Rapport_ChatBot_Sport_Emmanuel_AGBOTOME.pdf`) accompagne le projet et explique les choix de conception, notamment le modele de cout et la justification de l'admissibilite de l'heuristique A*.
